@@ -1,16 +1,12 @@
 package tool.doc;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.PrintStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.w3c.dom.Node;
+import org.jdom2.Element;
 
 
 import javax.swing.GroupLayout.Alignment;
@@ -34,9 +30,9 @@ public class TestNode extends MyTreeNode{
 		title = userObject;
 	}	
 	
-	public TestNode(Node node) {
-		super(node.getAttributes().getNamedItem("name").getNodeValue());
-		title = node.getAttributes().getNamedItem("name").getNodeValue();
+	public TestNode(Element  node) {
+		super(node.getAttributeValue("name"));
+		title = node.getAttributeValue("name");
 		load(node);
 	}
 
@@ -251,14 +247,14 @@ public class TestNode extends MyTreeNode{
 		out.print(" hasProblem = \""+(hasProblem?"YES":"NO")+"\"");
 	}
 	
-	public void load(Node node) {
-		preConditions = node.getAttributes().getNamedItem("preConditions").getNodeValue();
-		actions = node.getAttributes().getNamedItem("actions").getNodeValue();
-		postconditions = node.getAttributes().getNamedItem("postconditions").getNodeValue();
-		lastResult = node.getAttributes().getNamedItem("lastResult").getNodeValue();
-		priority = Double.parseDouble(node.getAttributes().getNamedItem("priority").getNodeValue());
-		lastTestedOn = Long.parseLong(node.getAttributes().getNamedItem("lastTestedOn").getNodeValue());
-		hasProblem = node.getAttributes().getNamedItem("hasProblem") != null && "YES".equals(node.getAttributes().getNamedItem("hasProblem").getNodeValue());
+	public void load(Element node) {
+		preConditions = node.getAttributeValue("preConditions");
+		actions = node.getAttributeValue("actions");
+		postconditions = node.getAttributeValue("postconditions");
+		lastResult = node.getAttributeValue("lastResult");
+		priority = Double.parseDouble(node.getAttributeValue("priority"));
+		lastTestedOn = Long.parseLong(node.getAttributeValue("lastTestedOn"));
+		hasProblem =node.getAttributeValue("hasProblem") != null && "YES".equals(node.getAttributeValue("hasProblem"));
 	}
 	
 	public void setName(String name2) {

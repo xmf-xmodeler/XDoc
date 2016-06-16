@@ -6,19 +6,17 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 public class MyTreeModel extends DefaultTreeModel {
 
@@ -75,8 +73,8 @@ public class MyTreeModel extends DefaultTreeModel {
 			File file = new File("doc/mainDoc.xdoc");
 			PrintStream out;
 			out = new PrintStream(file, "UTF-8");
-			out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><XModelerDocumentation>");
-			writeTree(out, (MyTreeNode) getRoot());
+			out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XModelerDocumentation>\n");
+			writeTree(out, (MyTreeNode) getRoot(), "  ");
 			out.print("</XModelerDocumentation>");
 			out.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();
@@ -85,19 +83,19 @@ public class MyTreeModel extends DefaultTreeModel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void writeTree(PrintStream out, MyTreeNode node) {
-		out.print("<Node");
+	private void writeTree(PrintStream out, MyTreeNode node, String prefix) {
+		out.print(prefix + "<Node");
 		out.print(" name = \""+node.toString()+"\"");	
 		out.print(" type = \""+node.getType()+"\"");
 		node.save(out);
 		if(node.getChildCount() > 0) {
-			out.print(">");
+			out.print(">\n");
 			for(Object o : Collections.list(node.children())) {
-				writeTree(out, (MyTreeNode) o);
+				writeTree(out, (MyTreeNode) o, prefix + "  ");
 			}
-			out.print("</Node>");
+			out.print(prefix + "</Node>\n");
 		} else {
-			out.print("/>");
+			out.print("/>\n");
 		}
 		
 	}
@@ -107,28 +105,25 @@ public class MyTreeModel extends DefaultTreeModel {
 		try {
 			File fXmlFile = new File("doc/mainDoc.xdoc");
 			if (fXmlFile.exists()) {
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				Document doc = dBuilder.parse(fXmlFile);
-				doc.getDocumentElement().normalize();
-				String rootNodeName = doc.getDocumentElement().getNodeName();
-				Node node = doc.getDocumentElement();
-				if (rootNodeName.equals("XModelerDocumentation")) {
-					MyTreeNode root = loadTree(node.getFirstChild());
+				
+			    SAXBuilder builder = new SAXBuilder();
+				Document document = (Document) builder.build(fXmlFile);
+		        Element rootNode = document.getRootElement();
+				if (rootNode.getName().equals("XModelerDocumentation")) {
+					MyTreeNode root = loadTree(rootNode.getChildren().get(0));
 					setRoot(root);
 				} else {
 				}
 			}
-		} catch (ParserConfigurationException e) { e.printStackTrace();
-		} catch (SAXException e) { e.printStackTrace();
 		} catch (IOException e) { e.printStackTrace();
+		} catch (JDOMException e) { e.printStackTrace();
 		}
 
 	}
 
-	private MyTreeNode loadTree(Node node) {
-		String name = node.getAttributes().getNamedItem("name").getNodeValue();
-		String type = node.getAttributes().getNamedItem("type").getNodeValue();
+	private MyTreeNode loadTree(Element node) {
+		String name = node.getAttributeValue("name");
+		String type = node.getAttributeValue("type");
 		
 		MyTreeNode treeNode;
 		
@@ -139,9 +134,9 @@ public class MyTreeModel extends DefaultTreeModel {
 		}
 		 
 		
-		NodeList children = node.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++) {
-			Node child = children.item(i);
+		List<Element> children = node.getChildren();
+		for(int i = 0; i < children.size(); i++) {
+			Element child = children.get(i);
 			MyTreeNode childTreeNode = loadTree(child);
 			treeNode.add(childTreeNode);
 		}
