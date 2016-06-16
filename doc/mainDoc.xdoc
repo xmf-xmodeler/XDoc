@@ -31,10 +31,14 @@
           <Node name = "Load Image 1" type = "test" preConditions = "XModeler not yet started." actions = "Open XModeler. When asked, load image from [LINK HERE]." postconditions = "I: Check console for suspicious messages.&#10;II: Check if Class [X] exists in diagram [Y]" lastResult = "" priority = "0.0" lastTestedOn = "0" hasProblem = "NO"/>
         </Node>
         <Node name = "Load Then Save" type = "default">
-          <Node name = "Load/Save/Compare" type = "test" preConditions = "XModeler not yet started." actions = "Open XModeler. When asked, load image from [LINK HERE].&#10;Save Image to different name. Compare xml files" postconditions = "The differences are caused by different dates/usernames but otherwise identical." lastResult = "" priority = "0.0" lastTestedOn = "0" hasProblem = "NO"/>
+          <Node name = "Load/Save/Compare" type = "test" preConditions = "XModeler not yet started." actions = "Open XModeler. When asked, load image from [LINK HERE].&#10;Save Image to different name. Compare xml files" postconditions = "The dby different dates/usernames but otherwise identical." lastResult = "" priority = "0.0" lastTestedOn = "0" hasProblem = "NO"/>
         </Node>
       </Node>
     </Node>
-    <Node name = "Multilevel" type = "default"/>
+    <Node name = "Multilevel" type = "default">
+      <Node name = "multi_test" type = "default">
+        <Node name = "test1" type = "test" preConditions = "akjhdjasdjksad&#10;&#10;&#10;&#10;&#10;&#10;&#10;asdasd&#10;asd" actions = "asdasd&#10;asd&#10;asd&#10;as&#10;das&#10;dasd&#10;asd" postconditions = "&#10;&#10;asdasd" lastResult = "" priority = "0.0" lastTestedOn = "0" hasProblem = "NO"/>
+      </Node>
+    </Node>
   </Node>
 </XModelerDocumentation>
