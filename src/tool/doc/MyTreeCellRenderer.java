@@ -46,14 +46,16 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
         return new ImageIcon(combinedImage);
 	}
 	
-	public static ImageIcon addClock(Image background) {
+	public static ImageIcon addClock(Image background, int checkIsDue) {
         final BufferedImage combinedImage = new BufferedImage( 
                 16,//imgBG.getWidth(), 
                 16,//imgBG.getHeight(), 
                 BufferedImage.TYPE_INT_ARGB );
         Graphics2D g = combinedImage.createGraphics();
         g.drawImage(background,0,0,null);
-        g.drawImage(new ImageIcon("icons/Clock.gif").getImage(),0,0,null);
+        g.drawImage(new ImageIcon(
+        		checkIsDue==1?"icons/CalWhite.gif":
+        	    checkIsDue==2?"icons/CalYellow.gif":"icons/CalRed.gif").getImage(),0,0,null);
         g.dispose();
         return new ImageIcon(combinedImage);
 	}	
@@ -65,7 +67,7 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
                 BufferedImage.TYPE_INT_ARGB );
         Graphics2D g = combinedImage.createGraphics();
         g.drawImage(background,0,0,null);
-        g.drawImage(new ImageIcon("icons/Error.gif").getImage(),0,0,null);
+        g.drawImage(new ImageIcon("icons/Achtung.png").getImage(),0,0,null);
         g.dispose();
         return new ImageIcon(combinedImage);
 	}

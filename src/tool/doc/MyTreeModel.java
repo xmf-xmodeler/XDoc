@@ -115,10 +115,8 @@ public class MyTreeModel extends DefaultTreeModel {
 				Node node = doc.getDocumentElement();
 				if (rootNodeName.equals("XModelerDocumentation")) {
 					MyTreeNode root = loadTree(node.getFirstChild());
-					System.err.println("loaded " + root);
 					setRoot(root);
 				} else {
-					System.err.println("loaded nothing");
 				}
 			}
 		} catch (ParserConfigurationException e) { e.printStackTrace();

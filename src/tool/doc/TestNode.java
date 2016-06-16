@@ -56,9 +56,13 @@ public class TestNode extends MyTreeNode{
 	
 	public ImageIcon getIcon(Image defaultIcon) {
 		try {
-			Image icon = new ImageIcon("icons/List.gif").getImage();
-			if(hasProblem) icon = MyTreeCellRenderer.addProblem(icon).getImage();
-			if(checkIsDue()) icon = MyTreeCellRenderer.addClock(icon).getImage();
+			Image icon = new ImageIcon(hasProblem?"icons/ListError.png":"icons/List.gif").getImage();
+			if(hasProblem) {
+//				icon = MyTreeCellRenderer.addProblem(icon).getImage();
+				return new ImageIcon(icon);
+			}
+			int checkIsDue = checkIsDue();
+			if(checkIsDue > 0) icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
 			return new ImageIcon(icon);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,8 +70,11 @@ public class TestNode extends MyTreeNode{
 		}
  	}
 	
-	protected boolean checkIsDue() {
-		return System.currentTimeMillis() - lastTestedOn > 1000000000;
+	protected int checkIsDue() {
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 30) return 3;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 7) return 2;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 1) return 1;
+		return 0;
 	}
 
 	protected boolean hasProblem() {

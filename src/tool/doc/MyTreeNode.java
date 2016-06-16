@@ -29,8 +29,12 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 
 	public ImageIcon getIcon(Image defaultIcon) {
 		try {
-			if(hasProblem()) defaultIcon = MyTreeCellRenderer.addProblem(defaultIcon).getImage();
-			if(checkIsDue()) defaultIcon = MyTreeCellRenderer.addClock(defaultIcon).getImage();
+			if(hasProblem()) {
+				defaultIcon = MyTreeCellRenderer.addProblem(defaultIcon).getImage();
+				return new ImageIcon(defaultIcon);
+			}
+			int checkIsDue = checkIsDue();
+			if(checkIsDue > 0) defaultIcon = MyTreeCellRenderer.addClock(defaultIcon, checkIsDue).getImage();
 			return new ImageIcon(defaultIcon);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,10 +42,10 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		}
  	}
 
-	protected boolean checkIsDue() {
-		boolean checkIsDue = false;
-		for(int i = 0; i < getChildCount() && ! checkIsDue; i++) {
-			checkIsDue |= ((MyTreeNode) getChildAt(i)).checkIsDue();
+	protected int checkIsDue() {
+		int checkIsDue = 0;
+		for(int i = 0; i < getChildCount(); i++) {
+			checkIsDue  = Math.max(checkIsDue, ((MyTreeNode) getChildAt(i)).checkIsDue());
 		}
 		return checkIsDue;
 	}
