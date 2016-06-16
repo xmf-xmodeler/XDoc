@@ -22,7 +22,7 @@ import org.jdom2.Element;
 
 import javax.swing.GroupLayout.Alignment;
 
-public class TestNode extends MyTreeNode{
+public class TestNode extends MyTreeNode {
 	private static final long serialVersionUID = 1L;
 	
 	public TestNode(String userObject) {

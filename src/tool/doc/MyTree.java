@@ -44,25 +44,19 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 						@Override public void actionPerformed(ActionEvent e) {getModel().actionAdd(node);}
 					});
 					menu.add(addMenu);
-//					JMenuItem addRRMenu = new JMenuItem("Add Requirements");
-//					addRRMenu.addActionListener(new ActionListener() {			
-//						@Override public void actionPerformed(ActionEvent e) {getModel().actionAddRequirements(node);}
-//					});
-//					menu.add(addRRMenu);
-//					JMenuItem addTTMenu = new JMenuItem("Add Tests");
-//					addTTMenu.addActionListener(new ActionListener() {			
-//						@Override public void actionPerformed(ActionEvent e) {getModel().actionAddTests(node);}
-//					});
-//					menu.add(addTTMenu);
-//				}
-//				if(node instanceof RequirementsNode) {
-					JMenuItem addRMenu = new JMenuItem("(Add Requirement)");
+
+					JMenuItem addRMenu = new JMenuItem("Add Requirement");
 					addRMenu.addActionListener(new ActionListener() {			
 						@Override public void actionPerformed(ActionEvent e) {getModel().actionAddRequirement(node);}
 					});
+					
 					menu.add(addRMenu);
-//				}
-//				if(node instanceof TestsNode) {
+					JMenuItem addSMenu = new JMenuItem("Add Specification");
+					addSMenu.addActionListener(new ActionListener() {			
+						@Override public void actionPerformed(ActionEvent e) {getModel().actionAddSpecification(node);}
+					});
+					menu.add(addSMenu);
+					
 					JMenuItem addTMenu = new JMenuItem("Add Test");
 					addTMenu.addActionListener(new ActionListener() {			
 						@Override public void actionPerformed(ActionEvent e) {getModel().actionAddTest(node);}

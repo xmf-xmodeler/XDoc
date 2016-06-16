@@ -38,6 +38,8 @@
     <Node name = "Multilevel" type = "default">
       <Node name = "multi_test" type = "default">
         <Node name = "test1" type = "test" preConditions = "akjhdjasdjksad&#10;&#10;&#10;&#10;&#10;&#10;&#10;asdasd&#10;asd" actions = "asdasd&#10;asd&#10;asd&#10;as&#10;das&#10;dasd&#10;asd" postconditions = "&#10;&#10;asdasd" lastResult = "" priority = "0.0" lastTestedOn = "0" hasProblem = "NO"/>
+        <Node name = "new Requirement" type = "requirement"/>
+        <Node name = "new Specification" type = "specification"/>
       </Node>
     </Node>
   </Node>

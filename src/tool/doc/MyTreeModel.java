@@ -28,9 +28,7 @@ public class MyTreeModel extends DefaultTreeModel {
 	public MyTreeModel(DocFrame parent) {
 		super(new MyTreeNode("Root"));
 		this.frame = parent;
-		System.err.println("loading file");
 		load();
-		System.err.println("file loaded");
 	}
 
 	public void actionRename(MyTreeNode node) {
@@ -57,14 +55,21 @@ public class MyTreeModel extends DefaultTreeModel {
 		insertNodeInto(child, parent, parent.getChildCount());
 	}
 
-	public void actionAddRequirement(DefaultMutableTreeNode node) {
-		// TODO Auto-generated method stub
-		
+	public void actionAddRequirement(DefaultMutableTreeNode parent) {
+		String name = JOptionPane.showInputDialog(frame, "New Requirement:", "new Requirement");
+		RequirementNode child = new RequirementNode(name);
+		insertNodeInto(child, parent, parent.getChildCount());
 	}
 
 	public void actionAddTest(DefaultMutableTreeNode parent) {
 		String name = JOptionPane.showInputDialog(frame, "New Test:", "new Test");
 		TestNode child = new TestNode(name);
+		insertNodeInto(child, parent, parent.getChildCount());
+	}
+	
+	public void actionAddSpecification(DefaultMutableTreeNode parent) {
+		String name = JOptionPane.showInputDialog(frame, "New Specification:", "new Specification");
+		SpecificationNode child = new SpecificationNode(name);
 		insertNodeInto(child, parent, parent.getChildCount());
 	}
 
@@ -105,7 +110,6 @@ public class MyTreeModel extends DefaultTreeModel {
 		try {
 			File fXmlFile = new File("doc/mainDoc.xdoc");
 			if (fXmlFile.exists()) {
-				
 			    SAXBuilder builder = new SAXBuilder();
 				Document document = (Document) builder.build(fXmlFile);
 		        Element rootNode = document.getRootElement();
@@ -129,11 +133,14 @@ public class MyTreeModel extends DefaultTreeModel {
 		
 		if("test".equals(type)) {
 			treeNode = new TestNode(node);
+		} else if("requirement".equals(type)) {
+			treeNode = new RequirementNode(node);
+		} else if("specification".equals(type)) {
+			treeNode = new SpecificationNode(node);
 		} else {
 			treeNode = new MyTreeNode(name);
 		}
-		 
-		
+	
 		List<Element> children = node.getChildren();
 		for(int i = 0; i < children.size(); i++) {
 			Element child = children.get(i);
@@ -155,7 +162,6 @@ public class MyTreeModel extends DefaultTreeModel {
 	public void actionPaste(DefaultMutableTreeNode parent) {
 		MyTreeNode newNode = copyTree((MyTreeNode) clipboard);
 		insertNodeInto(newNode, parent, parent.getChildCount());
-//		parent.add(newNode);		
 	}
 
 	private MyTreeNode copyTree(MyTreeNode original) {
@@ -191,5 +197,6 @@ public class MyTreeModel extends DefaultTreeModel {
 	public void storeValues(MyTreeNode node) {
 		if(node != null) node.storeValues();
 	}
+
 
 }
