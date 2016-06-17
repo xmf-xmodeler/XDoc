@@ -238,6 +238,7 @@ public class TestNode extends MyTreeNode {
 	}
 	
 	public void save(PrintStream out) {
+		super.save(out);
 		out.print(" preConditions = \""+XMLHelper.protectSpecialCharacters(preConditions)+"\"");
 		out.print(" actions = \""+XMLHelper.protectSpecialCharacters(actions)+"\"");
 		out.print(" postconditions = \""+XMLHelper.protectSpecialCharacters(postconditions)+"\"");
@@ -248,6 +249,7 @@ public class TestNode extends MyTreeNode {
 	}
 	
 	public void load(Element node) {
+		super.load(node);
 		preConditions = node.getAttributeValue("preConditions");
 		actions = node.getAttributeValue("actions");
 		postconditions = node.getAttributeValue("postconditions");

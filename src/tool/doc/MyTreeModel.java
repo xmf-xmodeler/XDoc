@@ -90,8 +90,6 @@ public class MyTreeModel extends DefaultTreeModel {
 	@SuppressWarnings("unchecked")
 	private void writeTree(PrintStream out, MyTreeNode node, String prefix) {
 		out.print(prefix + "<Node");
-		out.print(" name = \""+node.toString()+"\"");	
-		out.print(" type = \""+node.getType()+"\"");
 		node.save(out);
 		if(node.getChildCount() > 0) {
 			out.print(">\n");
