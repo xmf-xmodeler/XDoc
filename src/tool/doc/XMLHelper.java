@@ -1,5 +1,7 @@
 package tool.doc;
 
+import java.util.Vector;
+
 public class XMLHelper {
 
 /**
@@ -38,6 +40,15 @@ public static String protectSpecialCharacters(String originalUnprotectedString) 
     }
 
     return stringBuffer.toString();
+}
+
+public static String printIntList(Vector<MyTreeNode> vec) {
+	String s = "";
+	for(int i = 0; i < vec.size(); i++) {
+		s += vec.get(i).id;
+		if(i < vec.size()-1) s += ";";
+	}
+	return s;
 }
 
 }

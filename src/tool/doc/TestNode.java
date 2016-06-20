@@ -30,8 +30,8 @@ public class TestNode extends MyTreeNode {
 		title = userObject;
 	}	
 	
-	public TestNode(Element  node) {
-		super(node.getAttributeValue("name"));
+	public TestNode(Element node) {
+		super(node);
 		title = node.getAttributeValue("name");
 		load(node);
 	}
@@ -92,7 +92,7 @@ public class TestNode extends MyTreeNode {
 	JTextArea lastTestedResultField;
 	JTextField priorityField;
 		
-		private class TestPanel extends JPanel {
+	private class TestPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		private TestPanel() {
@@ -121,13 +121,16 @@ public class TestNode extends MyTreeNode {
 
 			JButton reportTestButton = new JButton("Report Test Result");
 			
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst);
+			JLabel checkAgainstLabel = new JLabel("Check against:");
+			
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
 			
 			final int GAP = 3;
 			
 
-			final int BOXWIDTH = 470;
+			final int BOXWIDTH = 370;
 			
 			layout.setHorizontalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
@@ -137,15 +140,17 @@ public class TestNode extends MyTreeNode {
 							.addComponent(postLabel)
 							.addComponent(lastTestedOnLabel)
 							.addComponent(lastTestedResultLabel)
-							.addComponent(priorityLabel))
+							.addComponent(priorityLabel)
+							.addComponent(checkAgainstLabel))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(preScroll, BOXWIDTH, BOXWIDTH, BOXWIDTH)
-							.addComponent(actionScroll, BOXWIDTH, BOXWIDTH, BOXWIDTH)
-							.addComponent(postScroll, BOXWIDTH, BOXWIDTH, BOXWIDTH)
-							.addComponent(lastTestedOnField, BOXWIDTH/3, BOXWIDTH/3, BOXWIDTH/3)
-							.addComponent(resultScroll, BOXWIDTH, BOXWIDTH, BOXWIDTH)
-							.addComponent(priorityField, BOXWIDTH/3, BOXWIDTH/3, BOXWIDTH/3)
+							.addComponent(preScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(actionScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(postScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(lastTestedOnField, 150,150,150)
+							.addComponent(resultScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(priorityField, 60,60,60)
+							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(reportTestButton))
 					.addGap(GAP)
 					);
@@ -177,6 +182,10 @@ public class TestNode extends MyTreeNode {
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(priorityLabel)
 							.addComponent(priorityField))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(checkAgainstLabel)
+							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
 					.addGap(GAP)
 					.addComponent(reportTestButton)
 					.addGap(GAP)
@@ -226,6 +235,7 @@ public class TestNode extends MyTreeNode {
 			return title;
 		}
 
+	@Override
 	public void storeValues() {
 		try{
 			priority = Double.parseDouble(priorityField.getText());
@@ -236,7 +246,8 @@ public class TestNode extends MyTreeNode {
 		actions = actionField.getText();
 		postconditions = postField.getText();
 	}
-	
+
+	@Override
 	public void save(PrintStream out) {
 		super.save(out);
 		out.print(" preConditions = \""+XMLHelper.protectSpecialCharacters(preConditions)+"\"");
@@ -246,6 +257,7 @@ public class TestNode extends MyTreeNode {
 		out.print(" priority = \""+priority+"\"");
 		out.print(" lastTestedOn = \""+lastTestedOn+"\"");
 		out.print(" hasProblem = \""+(hasProblem?"YES":"NO")+"\"");
+		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainst)+"\"");
 	}
 	
 	public void load(Element node) {

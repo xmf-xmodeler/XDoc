@@ -18,11 +18,15 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 		Component defaultResult = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 		JLabel l = (JLabel) defaultResult;
 		
+		
 		if(! (value instanceof MyTreeNode)) {
 			return defaultResult;
 		}
 		
 		MyTreeNode node = (MyTreeNode) value;
+
+//		l.setText("(" + node.id + ") " + l.getText());
+		
 		try{
 			ImageIcon icon = node.getIcon(((ImageIcon)l.getIcon()).getImage());
 			if(icon != null) {l.setIcon(icon);}

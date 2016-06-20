@@ -19,12 +19,10 @@ public class DocFrame extends JFrame{
 	JScrollPane right;
 	
 	public static void main(String[] args) {
-		System.err.println("starting Thread");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 
-				System.err.println("main started");
 				DocFrame frame = new DocFrame();
 				final MyTree tree = new MyTree();
 				JScrollPane left = new JScrollPane(tree);
@@ -41,10 +39,8 @@ public class DocFrame extends JFrame{
 
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-				System.err.println("creating tree model");
 				final MyTreeModel model = new MyTreeModel(frame);
 				tree.setModel(model);
-				System.err.println("tree model created");
 
 				JMenuBar menubar = new JMenuBar();
 				JMenu menu = new JMenu("File");
@@ -68,18 +64,12 @@ public class DocFrame extends JFrame{
 
 				frame.setJMenuBar(menubar);
 
-				System.err.println("frame finished, setting visible");
 				frame.setVisible(true);
-				System.err.println("frame visible now");
 			}
 		});
-		System.err.println("Thread started");
 	}
 
-	public void setEditPanel(JPanel p) {
-//		split.setResizeWeight(0.0);
-//		JScrollPane right = new JScrollPane(p);
-//		split.setRightComponent(right);		
+	public void setEditPanel(JPanel p) {	
 		right.setViewportView(p);
 	}
 

@@ -2,6 +2,7 @@ package tool.doc;
 
 import java.awt.Image;
 import java.io.PrintStream;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -17,11 +18,17 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	String name;
 	TreeNodeType type;
 	String content;
-	Vector<MyTreeNode> hasToBeCheckedAgainst;
+	Vector<MyTreeNode> hasToBeCheckedAgainst = new Vector<MyTreeNode>();
+	transient String hasToBeCheckedAgainstText;
 	int id;
 
-	public MyTreeNode(Object userObject) {
-		super(userObject);
+	public MyTreeNode(String s) {
+		super(s);
+	}
+	
+	public MyTreeNode(Element node) {
+		super(node.getAttributeValue("name"));
+		load(node);
 	}
 
 	public String getType() {
@@ -74,28 +81,35 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	
 	public void load(Element node) {
 		
-		if(node.getAttributeValue("id") == null) {
-			createID();
+		if(node.getAttributeValue("id") == null || 1 >= Integer.parseInt(node.getAttributeValue("id"))) {
+			id = 0;
 		} else {
 			id = Integer.parseInt(node.getAttributeValue("id"));
 		}
+		
+		hasToBeCheckedAgainstText = node.getAttributeValue("checkAgainst");
 	}
 
-	private void createID() {
+	public void createID() {
+//		throw new RuntimeException();
 		id = getRootNode().getnextID();		
 	}
 
 	private int getnextID() {
-		int i = 1;
-		while(numberExists(i)) {
-			i++;
-		}
+		int i;
+		int iMax = 32;
+		do {
+			i = new Random().nextInt(iMax);
+			iMax *= 2;
+			if(iMax < 0) iMax = 32;
+		} while(numberExists(i));
 		return i;
 	}
 
 	private boolean numberExists(int i) {
-		if(id == i) return true;
-		for(int x = 0; x < getChildCount(); x++ ) {
+		if(i <= 1) return true;
+ 		if(id == i) return true;
+		for(int x = 0; x < getChildCount(); x++) {
 			if(((MyTreeNode)getChildAt(x)).numberExists(i)) return true;
 		}
 		return false;
@@ -123,6 +137,37 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 
 	private void addCheckAgainst(MyTreeNode myTreeNode) {
 		if(!hasToBeCheckedAgainst.contains(myTreeNode)) hasToBeCheckedAgainst.addElement(myTreeNode);
+	}
+
+	public void updateLinks() {
+		if(hasToBeCheckedAgainstText != null) {
+			updateMyLinks();
+		}
+		for(int i = 0; i < getChildCount(); i++ ) {
+			((MyTreeNode)getChildAt(i)).updateLinks();
+		}
+		hasToBeCheckedAgainstText = null;
+	}
+
+	private void updateMyLinks() {
+		if("".equals(hasToBeCheckedAgainstText)) return;
+		String[] links = hasToBeCheckedAgainstText.split(";");
+		for(int i = 0; i < links.length; i++) {
+			String idS = links[i];
+			Integer id = Integer.parseInt(idS);
+			MyTreeNode node = getRootNode().findNode(id);
+			if(node == null) throw new IllegalArgumentException();
+			hasToBeCheckedAgainst.addElement(node);
+		}
+	}
+
+	private MyTreeNode findNode(Integer ID) {
+		if(id == ID) return this;
+		for(int i = 0; i < getChildCount(); i++ ) {
+			MyTreeNode found = ((MyTreeNode)getChildAt(i)).findNode(ID);
+			if(found != null) return found;
+		}
+		return null;
 	}
 	
 	

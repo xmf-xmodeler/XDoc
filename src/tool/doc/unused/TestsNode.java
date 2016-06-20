@@ -1,4 +1,4 @@
-package tool.doc;
+package tool.doc.unused;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

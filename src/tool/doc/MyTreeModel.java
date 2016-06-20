@@ -18,6 +18,9 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+import tool.doc.unused.RequirementsNode;
+import tool.doc.unused.TestsNode;
+
 public class MyTreeModel extends DefaultTreeModel {
 
 	private static final long serialVersionUID = 1L;
@@ -26,7 +29,7 @@ public class MyTreeModel extends DefaultTreeModel {
 	private transient DefaultMutableTreeNode clipboard;
 	
 	public MyTreeModel(DocFrame parent) {
-		super(new MyTreeNode("Root"));
+		super(null);
 		this.frame = parent;
 		load();
 	}
@@ -42,35 +45,41 @@ public class MyTreeModel extends DefaultTreeModel {
 		if(name != null) {
 			MyTreeNode child = new MyTreeNode(name);
 			insertNodeInto(child, parent, parent.getChildCount());
+			child.createID();
 		}
 	}
 
-	public void actionAddRequirements(DefaultMutableTreeNode parent) {
-		RequirementsNode child = new RequirementsNode("Requirements");
-		insertNodeInto(child, parent, parent.getChildCount());
-	}
-
-	public void actionAddTests(DefaultMutableTreeNode parent) {
-		TestsNode child = new TestsNode("Tests");
-		insertNodeInto(child, parent, parent.getChildCount());
-	}
+//	public void actionAddRequirements(DefaultMutableTreeNode parent) {
+//		RequirementsNode child = new RequirementsNode("Requirements");
+//		insertNodeInto(child, parent, parent.getChildCount());
+//		child.createID();
+//	}
+//
+//	public void actionAddTests(DefaultMutableTreeNode parent) {
+//		TestsNode child = new TestsNode("Tests");
+//		insertNodeInto(child, parent, parent.getChildCount());
+//		child.createID();
+//	}
 
 	public void actionAddRequirement(DefaultMutableTreeNode parent) {
 		String name = JOptionPane.showInputDialog(frame, "New Requirement:", "new Requirement");
 		RequirementNode child = new RequirementNode(name);
 		insertNodeInto(child, parent, parent.getChildCount());
+		child.createID();
 	}
 
 	public void actionAddTest(DefaultMutableTreeNode parent) {
 		String name = JOptionPane.showInputDialog(frame, "New Test:", "new Test");
 		TestNode child = new TestNode(name);
 		insertNodeInto(child, parent, parent.getChildCount());
+		child.createID();
 	}
 	
 	public void actionAddSpecification(DefaultMutableTreeNode parent) {
 		String name = JOptionPane.showInputDialog(frame, "New Specification:", "new Specification");
 		SpecificationNode child = new SpecificationNode(name);
 		insertNodeInto(child, parent, parent.getChildCount());
+		child.createID();
 	}
 
 	public void save() {
@@ -113,6 +122,7 @@ public class MyTreeModel extends DefaultTreeModel {
 		        Element rootNode = document.getRootElement();
 				if (rootNode.getName().equals("XModelerDocumentation")) {
 					MyTreeNode root = loadTree(rootNode.getChildren().get(0));
+					root.updateLinks();
 					setRoot(root);
 				} else {
 				}
@@ -136,7 +146,7 @@ public class MyTreeModel extends DefaultTreeModel {
 		} else if("specification".equals(type)) {
 			treeNode = new SpecificationNode(node);
 		} else {
-			treeNode = new MyTreeNode(name);
+			treeNode = new MyTreeNode(node);
 		}
 	
 		List<Element> children = node.getChildren();
