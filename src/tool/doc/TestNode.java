@@ -43,6 +43,7 @@ public class TestNode extends MyTreeNode {
 	String title;
 	double priority;
 	long lastTestedOn;
+	String lastTestedBy = "N/A";
 	String lastResult;
 	
 	String preConditions;
@@ -206,6 +207,7 @@ public class TestNode extends MyTreeNode {
 					switch(result) {
 					case JOptionPane.YES_OPTION : {
 						lastTestedOn = System.currentTimeMillis();
+						lastTestedBy = DocFrame.user;
 						setlastTestedOnDate();
 						lastResult = "Success";
 						lastTestedResultField.setText(lastResult);
@@ -214,6 +216,7 @@ public class TestNode extends MyTreeNode {
 					}
 					case JOptionPane.NO_OPTION : {
 						lastTestedOn = System.currentTimeMillis();
+						lastTestedBy = DocFrame.user;
 						setlastTestedOnDate();
 						lastResult = "Fail";
 						lastTestedResultField.setText(lastResult);
@@ -258,6 +261,7 @@ public class TestNode extends MyTreeNode {
 		out.print(" lastResult = \""+XMLHelper.protectSpecialCharacters(lastResult)+"\"");
 		out.print(" priority = \""+priority+"\"");
 		out.print(" lastTestedOn = \""+lastTestedOn+"\"");
+		out.print(" lastTestedBy = \""+lastTestedBy+"\"");
 		out.print(" hasProblem = \""+(hasProblem?"YES":"NO")+"\"");
 		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainst)+"\"");
 	}
@@ -271,9 +275,29 @@ public class TestNode extends MyTreeNode {
 		priority = Double.parseDouble(node.getAttributeValue("priority"));
 		lastTestedOn = Long.parseLong(node.getAttributeValue("lastTestedOn"));
 		hasProblem =node.getAttributeValue("hasProblem") != null && "YES".equals(node.getAttributeValue("hasProblem"));
+		lastTestedBy = node.getAttributeValue("lastTestedBy"); if(lastTestedBy == null) lastTestedBy = "N/A";
 	}
 	
 	public void setName(String name2) {
 		title = name2;
+	}
+
+	public void report(PrintStream out) {
+		out.print("<tr><td bgColor=\"#"+(hasProblem()?"ff0000":isDueColor())+"\">" + id);
+		out.print("</td><td>" + title);
+		out.print("</td><td>" + new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss").format(new Date(lastTestedOn)));
+		out.print("</td><td>" + lastTestedBy);
+		out.print("</td><td>" + lastResult);
+		out.print("&nbsp;</td><td>" + XMLHelper.printIntList(hasToBeCheckedAgainst));
+		out.print("&nbsp;</td></tr>\n");
+	}
+
+	private String isDueColor() {
+		int isDue = checkIsDue();
+		if(isDue == 0) return "00bb77";
+		if(isDue == 1) return "77bb00";
+		if(isDue == 2) return "ffee00";
+		if(isDue == 3) return "ff8800";
+		return "000000";
 	}
 }

@@ -143,4 +143,8 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 		getModel().load();
 	}
 
+	public void report() {
+		getModel().report();		
+	}
+
 }

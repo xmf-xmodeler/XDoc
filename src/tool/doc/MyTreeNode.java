@@ -1,7 +1,10 @@
 package tool.doc;
 
 import java.awt.Image;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.Vector;
 
@@ -179,6 +182,44 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	public MyTree getTree() {
 		if(getRootNode() == this) return tree;
 		return getRootNode().getTree();
+	}
+
+	public void report() {
+		try {
+			Vector<MyTreeNode> allNodes = getAllChildren();
+			File file = new File("doc/mainDocReport.html");
+			PrintStream out;
+			out = new PrintStream(file, "UTF-8");
+			out.print("<html><head><title>Test Report</title></head><body><table border=\"1\" width=\"100%\">\n");
+			out.print("<tr><th>ID");
+			out.print("</th><th width=\"18%\">Title");
+			out.print("</th><th>tested on");
+			out.print("</th><th>tested by");
+			out.print("</th><th width=\"55%\">lastResult");
+			out.print("</th><th>check against");
+			out.print("</th></tr>\n");
+			for(MyTreeNode node : allNodes) {
+				if(node instanceof TestNode) {
+					TestNode testNode = (TestNode) node;
+					testNode.report(out);
+				}
+			}
+			out.print("</table></body></html>");
+			out.close();
+		} catch (FileNotFoundException e) {e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {e.printStackTrace();
+		}
+	}
+
+	private Vector<MyTreeNode> getAllChildren() {
+		Vector<MyTreeNode> result = new Vector<MyTreeNode>();
+		result.add(this);
+		
+		for(int i = 0; i < getChildCount(); i++ ) {
+			result.addAll(((MyTreeNode)getChildAt(i)).getAllChildren());
+		}
+		
+		return result;
 	}
 	
 	

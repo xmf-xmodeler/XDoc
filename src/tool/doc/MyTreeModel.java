@@ -203,5 +203,9 @@ public class MyTreeModel extends DefaultTreeModel {
 		if(node != null) node.storeValues();
 	}
 
+	public void report() {
+		((MyTreeNode)getRoot()).report();
+	}
+
 
 }
