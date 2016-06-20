@@ -170,5 +170,16 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		return null;
 	}
 	
+	public void setTree(MyTree tree) {
+		this.tree = tree;
+	}
+	
+	private MyTree tree;
+	
+	public MyTree getTree() {
+		if(getRootNode() == this) return tree;
+		return getRootNode().getTree();
+	}
+	
 	
 }

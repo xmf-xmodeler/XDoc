@@ -18,9 +18,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import tool.doc.unused.RequirementsNode;
-import tool.doc.unused.TestsNode;
-
 public class MyTreeModel extends DefaultTreeModel {
 
 	private static final long serialVersionUID = 1L;
@@ -124,6 +121,7 @@ public class MyTreeModel extends DefaultTreeModel {
 					MyTreeNode root = loadTree(rootNode.getChildren().get(0));
 					root.updateLinks();
 					setRoot(root);
+					root.setTree(frame.tree);
 				} else {
 				}
 			}
@@ -134,7 +132,6 @@ public class MyTreeModel extends DefaultTreeModel {
 	}
 
 	private MyTreeNode loadTree(Element node) {
-		String name = node.getAttributeValue("name");
 		String type = node.getAttributeValue("type");
 		
 		MyTreeNode treeNode;

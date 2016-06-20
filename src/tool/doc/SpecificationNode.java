@@ -26,7 +26,7 @@ public class SpecificationNode extends MyTreeNode {
 		title = userObject;
 	}	
 	
-	public SpecificationNode(Element  node) {
+	public SpecificationNode(Element node) {
 		super(node);
 		title = node.getAttributeValue("name");
 		load(node);
@@ -34,7 +34,11 @@ public class SpecificationNode extends MyTreeNode {
 
 	@Override
 	public ImageIcon getIcon(Image defaultIcon) {
-		return new ImageIcon("icons/Specification.gif") ;
+		defaultIcon = new ImageIcon("icons/Specification.gif").getImage();
+		if(!hasToBeCheckedAgainst.isEmpty()) {
+			defaultIcon = MyTreeCellRenderer.addProblem(defaultIcon).getImage();
+		}
+		return new ImageIcon(defaultIcon);
  	}
 	
 	@Override
@@ -94,7 +98,7 @@ public class SpecificationNode extends MyTreeNode {
 			JScrollPane textScroll = new JScrollPane(textField);
 			JLabel textLabel = new JLabel("Text");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst);
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst, getTree());
 			JLabel checkAgainstLabel = new JLabel("Has to be checked against:");
 			
 			GroupLayout layout = new GroupLayout(this);
@@ -132,5 +136,5 @@ public class SpecificationNode extends MyTreeNode {
 		}
 		
 	}
-	
+
 }

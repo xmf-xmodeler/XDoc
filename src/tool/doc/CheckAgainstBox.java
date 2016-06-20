@@ -11,17 +11,22 @@ import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 public class CheckAgainstBox extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	
 	private JList<MyTreeNode> list;
+	private MyTree tree;
 
-	public CheckAgainstBox(Vector<MyTreeNode> hasToBeCheckedAgainst) {
+	public CheckAgainstBox(Vector<MyTreeNode> hasToBeCheckedAgainst, MyTree tree) {
 		MyListModel listModel = new MyListModel(hasToBeCheckedAgainst);
 		list = new JList<>(listModel);
 		list.addMouseListener(listModel);
 		setViewportView(list);
+		this.tree = tree;
 	}
 	
 	private class MyListModel extends AbstractListModel<MyTreeNode> implements MouseListener {
@@ -50,7 +55,7 @@ public class CheckAgainstBox extends JScrollPane {
 			
 			if(e.getButton() == MouseEvent.BUTTON3) {
 				JPopupMenu menu = new JPopupMenu();
-				JMenuItem gotoMenu = new JMenuItem("(Go To Node)");
+				JMenuItem gotoMenu = new JMenuItem("Go To Node");
 				gotoMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {goToNode(selectedNode);}
 
@@ -66,9 +71,11 @@ public class CheckAgainstBox extends JScrollPane {
 			}
 		}
 
-		private void goToNode(MyTreeNode selectedNode) {
-			// TODO Auto-generated method stub
-			
+		private void goToNode(MyTreeNode selectedNode) {	
+            TreeNode[] nodes = ((DefaultTreeModel) tree.getModel()).getPathToRoot(selectedNode);
+            TreePath tpath = new TreePath(nodes);
+            tree.scrollPathToVisible(tpath);
+            tree.setSelectionPath(tpath);
 		}
 		
 		private void deleteNode(MyTreeNode selectedNode) {

@@ -17,6 +17,7 @@ public class DocFrame extends JFrame{
 	
 	JSplitPane split;
 	JScrollPane right;
+	MyTree tree;
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -25,6 +26,7 @@ public class DocFrame extends JFrame{
 
 				DocFrame frame = new DocFrame();
 				final MyTree tree = new MyTree();
+				frame.tree = tree;
 				JScrollPane left = new JScrollPane(tree);
 				frame.right = new JScrollPane();
 				frame.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, frame.right);

@@ -52,8 +52,10 @@ public class TestNode extends MyTreeNode {
 	
 	public ImageIcon getIcon(Image defaultIcon) {
 		try {
-			Image icon = new ImageIcon(hasProblem?"icons/ListError.png":"icons/List.gif").getImage();
-			if(hasProblem) {
+			boolean hasProblem2 = hasProblem||!hasToBeCheckedAgainst.isEmpty();
+			
+			Image icon = new ImageIcon(hasProblem2?"icons/ListError.png":"icons/List.gif").getImage();
+			if(hasProblem2) {
 //				icon = MyTreeCellRenderer.addProblem(icon).getImage();
 				return new ImageIcon(icon);
 			}
@@ -74,7 +76,7 @@ public class TestNode extends MyTreeNode {
 	}
 
 	protected boolean hasProblem() {
-		return hasProblem;
+		return hasProblem||!hasToBeCheckedAgainst.isEmpty();
 	}
 
 	
@@ -121,7 +123,7 @@ public class TestNode extends MyTreeNode {
 
 			JButton reportTestButton = new JButton("Report Test Result");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst);
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst, getTree());
 			JLabel checkAgainstLabel = new JLabel("Check against:");
 			
 			GroupLayout layout = new GroupLayout(this);
