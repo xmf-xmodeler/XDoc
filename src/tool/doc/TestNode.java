@@ -45,10 +45,11 @@ public class TestNode extends MyTreeNode {
 	long lastTestedOn;
 	String lastTestedBy = "N/A";
 	String lastResult;
-	
-	String preConditions;
-	String actions;
-	String postconditions;
+
+	String freeText = "";
+	String preConditions = "";
+	String actions = "";
+	String postconditions = "";
 	boolean hasProblem;
 	
 	public ImageIcon getIcon(Image defaultIcon) {
@@ -86,7 +87,8 @@ public class TestNode extends MyTreeNode {
 			
 		return p;
 	}
-	
+
+	JTextArea freeTextField;
 	JTextArea preField;
 	JTextArea actionField;
 	JTextArea postField;
@@ -99,6 +101,7 @@ public class TestNode extends MyTreeNode {
 		private static final long serialVersionUID = 1L;
 
 		private TestPanel() {
+			freeTextField = new JTextArea(freeText);
 			preField = new JTextArea(preConditions);
 			actionField = new JTextArea(actions);
 			postField = new JTextArea(postconditions);
@@ -109,11 +112,13 @@ public class TestNode extends MyTreeNode {
 			lastTestedResultField = new JTextArea(lastResult);
 			priorityField = new JTextField(priority+"");
 
+			JScrollPane freeTextScroll = new JScrollPane(freeTextField);
 			JScrollPane preScroll = new JScrollPane(preField);
 			JScrollPane actionScroll = new JScrollPane(actionField);
 			JScrollPane postScroll = new JScrollPane(postField);
 			JScrollPane resultScroll = new JScrollPane(lastTestedResultField);
 
+			JLabel freeTextLabel = new JLabel("Comment");
 			JLabel preLabel = new JLabel("Preconditions");
 			JLabel actionLabel = new JLabel("Action");
 			JLabel postLabel = new JLabel("Postconditions");
@@ -140,6 +145,7 @@ public class TestNode extends MyTreeNode {
 			layout.setHorizontalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(freeTextLabel)
 							.addComponent(preLabel)
 							.addComponent(actionLabel)
 							.addComponent(postLabel)
@@ -150,6 +156,7 @@ public class TestNode extends MyTreeNode {
 							.addComponent(linkedNodesLabel))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(freeTextScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(preScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(actionScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(postScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
@@ -165,6 +172,10 @@ public class TestNode extends MyTreeNode {
 			final int BOXHEIGHT = 60;
 			
 			layout.setVerticalGroup(layout.createSequentialGroup()
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(freeTextLabel)
+							.addComponent(freeTextScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(preLabel)
@@ -263,6 +274,7 @@ public class TestNode extends MyTreeNode {
 	@Override
 	public void save(PrintStream out) {
 		super.save(out);
+		out.print(" freeText = \""+XMLHelper.protectSpecialCharacters(freeText)+"\"");
 		out.print(" preConditions = \""+XMLHelper.protectSpecialCharacters(preConditions)+"\"");
 		out.print(" actions = \""+XMLHelper.protectSpecialCharacters(actions)+"\"");
 		out.print(" postconditions = \""+XMLHelper.protectSpecialCharacters(postconditions)+"\"");
@@ -275,6 +287,7 @@ public class TestNode extends MyTreeNode {
 	
 	public void load(Element node) {
 		super.load(node);
+		freeText = node.getAttributeValue("freeText");
 		preConditions = node.getAttributeValue("preConditions");
 		actions = node.getAttributeValue("actions");
 		postconditions = node.getAttributeValue("postconditions");

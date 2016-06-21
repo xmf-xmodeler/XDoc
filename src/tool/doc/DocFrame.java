@@ -2,6 +2,8 @@ package tool.doc;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +22,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-public class DocFrame extends JFrame{
+public class DocFrame extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 1L;
 	
 	JSplitPane split;
@@ -53,7 +55,7 @@ public class DocFrame extends JFrame{
 				frame.setSize(900, 600);
 				frame.setTitle("XDoc");
 
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 				final MyTreeModel model = new MyTreeModel(frame);
 				tree.setModel(model);
@@ -90,6 +92,8 @@ public class DocFrame extends JFrame{
 
 				frame.setVisible(true);
 				
+				frame.addWindowListener(frame);
+				
 				Timer t = new Timer(250, new ActionListener() {
 					
 					@Override
@@ -124,7 +128,6 @@ public class DocFrame extends JFrame{
 				br.close();
 			}
 
-			System.err.println("user: " + user);
 			if (user.equals("")) {
 				try {
 					File file2 = new File("user.txt");
@@ -146,4 +149,23 @@ public class DocFrame extends JFrame{
 			System.exit(0);
 		}
 	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		int save = JOptionPane.showConfirmDialog(this, "Save before EXIT?");
+		switch (save) {
+		case JOptionPane.YES_OPTION:
+			tree.getModel().save();
+		case JOptionPane.NO_OPTION:
+			System.exit(0);
+		}
+	}
+
+
+	@Override public void windowActivated(WindowEvent e) {}
+	@Override public void windowClosed(WindowEvent e) {}
+	@Override public void windowDeactivated(WindowEvent e) {}
+	@Override public void windowDeiconified(WindowEvent e) {}
+	@Override public void windowIconified(WindowEvent e) {}
+	@Override public void windowOpened(WindowEvent e) {}
 }
