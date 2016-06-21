@@ -53,7 +53,7 @@ public class TestNode extends MyTreeNode {
 	
 	public ImageIcon getIcon(Image defaultIcon) {
 		try {
-			boolean hasProblem2 = hasProblem||!hasToBeCheckedAgainst.isEmpty();
+			boolean hasProblem2 = hasProblem||!hasToBeCheckedAgainstList.isEmpty();
 			
 			Image icon = new ImageIcon(hasProblem2?"icons/ListError.png":"icons/List.gif").getImage();
 			if(hasProblem2) {
@@ -71,13 +71,13 @@ public class TestNode extends MyTreeNode {
 	
 	protected int checkIsDue() {
 		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 30) return 3;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 7) return 2;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 1) return 1;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 10) return 2;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 3) return 1;
 		return 0;
 	}
 
 	protected boolean hasProblem() {
-		return hasProblem||!hasToBeCheckedAgainst.isEmpty();
+		return hasProblem||!hasToBeCheckedAgainstList.isEmpty();
 	}
 
 	
@@ -124,8 +124,10 @@ public class TestNode extends MyTreeNode {
 
 			JButton reportTestButton = new JButton("Report Test Result");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst, getTree());
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree());
 			JLabel checkAgainstLabel = new JLabel("Check against:");
+			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree());
+			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
 			
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
@@ -144,7 +146,8 @@ public class TestNode extends MyTreeNode {
 							.addComponent(lastTestedOnLabel)
 							.addComponent(lastTestedResultLabel)
 							.addComponent(priorityLabel)
-							.addComponent(checkAgainstLabel))
+							.addComponent(checkAgainstLabel)
+							.addComponent(linkedNodesLabel))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 							.addComponent(preScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
@@ -154,25 +157,26 @@ public class TestNode extends MyTreeNode {
 							.addComponent(resultScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(priorityField, 60,60,60)
 							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(linkedNodesBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(reportTestButton))
 					.addGap(GAP)
 					);
 			
-			final int BOXHEIGHT = 80;
+			final int BOXHEIGHT = 60;
 			
 			layout.setVerticalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(preLabel)
-							.addComponent(preScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(preScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(actionLabel)
-							.addComponent(actionScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(actionScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(postLabel)
-							.addComponent(postScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(postScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lastTestedOnLabel)
@@ -180,7 +184,7 @@ public class TestNode extends MyTreeNode {
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lastTestedResultLabel)
-							.addComponent(resultScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(resultScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(priorityLabel)
@@ -188,7 +192,11 @@ public class TestNode extends MyTreeNode {
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(checkAgainstLabel)
-							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(linkedNodesLabel)
+							.addComponent(linkedNodesBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addComponent(reportTestButton)
 					.addGap(GAP)
@@ -263,7 +271,6 @@ public class TestNode extends MyTreeNode {
 		out.print(" lastTestedOn = \""+lastTestedOn+"\"");
 		out.print(" lastTestedBy = \""+lastTestedBy+"\"");
 		out.print(" hasProblem = \""+(hasProblem?"YES":"NO")+"\"");
-		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainst)+"\"");
 	}
 	
 	public void load(Element node) {
@@ -288,7 +295,7 @@ public class TestNode extends MyTreeNode {
 		out.print("</td><td>" + new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss").format(new Date(lastTestedOn)));
 		out.print("</td><td>" + lastTestedBy);
 		out.print("</td><td>" + lastResult);
-		out.print("&nbsp;</td><td>" + XMLHelper.printIntList(hasToBeCheckedAgainst));
+		out.print("&nbsp;</td><td>" + XMLHelper.printIntList(hasToBeCheckedAgainstList));
 		out.print("&nbsp;</td></tr>\n");
 	}
 

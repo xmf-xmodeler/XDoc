@@ -22,8 +22,9 @@ public class MyTreeModel extends DefaultTreeModel {
 
 	private static final long serialVersionUID = 1L;
 	private DocFrame frame;
-	
+
 	private transient DefaultMutableTreeNode clipboard;
+	private transient MyTreeNode linkClipboard;
 	
 	public MyTreeModel(DocFrame parent) {
 		super(null);
@@ -179,19 +180,23 @@ public class MyTreeModel extends DefaultTreeModel {
 	}
 
 	public void actionDelete(DefaultMutableTreeNode node) {
-//		DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
-//		parent.remove(node);
 		removeNodeFromParent(node);
 	}
 
 	public void actionUp(DefaultMutableTreeNode node) {
-		// TODO Auto-generated method stub
-		
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		int pos = parent.getIndex(node);
+		if(pos == 0) return;
+		removeNodeFromParent(node);
+		insertNodeInto(node, parent, pos-1);
 	}
 
 	public void actionDown(DefaultMutableTreeNode node) {
-		// TODO Auto-generated method stub
-		
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		int pos = parent.getIndex(node);
+		if(pos == parent.getChildCount() - 1) return;
+		removeNodeFromParent(node);
+		insertNodeInto(node, parent, pos+1);
 	}
 
 	public void showNodePanel(MyTreeNode node) {
@@ -205,6 +210,37 @@ public class MyTreeModel extends DefaultTreeModel {
 
 	public void report() {
 		((MyTreeNode)getRoot()).report();
+	}
+
+	public boolean canPaste() {
+		return clipboard != null;
+	}
+
+	public boolean canUp(MyTreeNode node) {
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		if(parent == null || parent == node) return false;
+		int pos = parent.getIndex(node);
+		return pos != 0;
+	}
+	
+	public boolean canDown(MyTreeNode node) {
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		if(parent == null || parent == node) return false;
+		int pos = parent.getIndex(node);
+		return pos != parent.getChildCount() - 1;
+	}
+
+	public void actionGetLink(MyTreeNode node) {
+		linkClipboard = node;
+	}
+
+	public void actionAddLink(MyTreeNode node) {
+		node.addLinkedNode(linkClipboard);
+		linkClipboard.addLinkedNode(node);
+	}
+
+	public boolean canAddLink(MyTreeNode node) {
+		return linkClipboard != null && node != linkClipboard;
 	}
 
 

@@ -83,18 +83,30 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 				pasteMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionPaste(node);}
 				});
+				pasteMenu.setEnabled(getModel().canPaste());
 				JMenuItem deleteMenu = new JMenuItem("Delete");
 				deleteMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionDelete(node);}
 				});
-				JMenuItem upMenu = new JMenuItem("(Up)");
+				JMenuItem upMenu = new JMenuItem("Up");
 				upMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionUp(node);}
 				});
-				JMenuItem downMenu = new JMenuItem("(Down)");
+				upMenu.setEnabled(getModel().canUp(node));
+				JMenuItem downMenu = new JMenuItem("Down");
 				downMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionDown(node);}
 				});
+				downMenu.setEnabled(getModel().canDown(node));
+				JMenuItem getLinkMenu = new JMenuItem("Create Link");
+				getLinkMenu.addActionListener(new ActionListener() {			
+					@Override public void actionPerformed(ActionEvent e) {getModel().actionGetLink(node);}
+				});
+				JMenuItem addLinkMenu = new JMenuItem("Add Link");
+				addLinkMenu.addActionListener(new ActionListener() {			
+					@Override public void actionPerformed(ActionEvent e) {getModel().actionAddLink(node);}
+				});
+				addLinkMenu.setEnabled(getModel().canAddLink(node));
 
 				menu.add(renameMenu);
 				menu.add(copyMenu);
@@ -104,6 +116,9 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 				menu.add(new JSeparator());
 				menu.add(upMenu);
 				menu.add(downMenu);
+				menu.add(new JSeparator());
+				menu.add(getLinkMenu);
+				menu.add(addLinkMenu);
 				
 				menu.show(this, e.getX(), e.getY());
 			}

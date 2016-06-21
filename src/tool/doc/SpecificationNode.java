@@ -35,7 +35,7 @@ public class SpecificationNode extends MyTreeNode {
 	@Override
 	public ImageIcon getIcon(Image defaultIcon) {
 		defaultIcon = new ImageIcon("icons/Specification.gif").getImage();
-		if(!hasToBeCheckedAgainst.isEmpty()) {
+		if(!hasToBeCheckedAgainstList.isEmpty()) {
 			defaultIcon = MyTreeCellRenderer.addProblem(defaultIcon).getImage();
 		}
 		return new ImageIcon(defaultIcon);
@@ -61,7 +61,6 @@ public class SpecificationNode extends MyTreeNode {
 	public void save(PrintStream out) {
 		super.save(out);
 		out.print(" text = \""+XMLHelper.protectSpecialCharacters(text)+"\"");
-		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainst)+"\"");
 	}
 	
 	@Override
@@ -98,8 +97,10 @@ public class SpecificationNode extends MyTreeNode {
 			JScrollPane textScroll = new JScrollPane(textField);
 			JLabel textLabel = new JLabel("Text");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainst, getTree());
-			JLabel checkAgainstLabel = new JLabel("Has to be checked against:");
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree());
+			JLabel checkAgainstLabel = new JLabel("Check against:");
+			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree());
+			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
 			
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
@@ -112,11 +113,13 @@ public class SpecificationNode extends MyTreeNode {
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 							.addComponent(textLabel)
+							.addComponent(linkedNodesLabel)
 							.addComponent(checkAgainstLabel))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 							.addComponent(textScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
-							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE))
+							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(linkedNodesBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE))
 					.addGap(GAP)
 					);
 			
@@ -130,7 +133,11 @@ public class SpecificationNode extends MyTreeNode {
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(checkAgainstLabel)
-							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(linkedNodesLabel)
+							.addComponent(linkedNodesBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					);
 		}

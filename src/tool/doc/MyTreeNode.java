@@ -21,8 +21,10 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	String name;
 	TreeNodeType type;
 	String content;
-	Vector<MyTreeNode> hasToBeCheckedAgainst = new Vector<MyTreeNode>();
+	Vector<MyTreeNode> hasToBeCheckedAgainstList = new Vector<MyTreeNode>();
+	Vector<MyTreeNode> linkedNodeList = new Vector<MyTreeNode>();
 	transient String hasToBeCheckedAgainstText;
+	transient String linkedNodeText;
 	int id;
 
 	public MyTreeNode(String s) {
@@ -80,6 +82,8 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		out.print(" id=\"" + id + "\"");
 		out.print(" name=\""+toString()+"\"");	
 		out.print(" type=\""+getType()+"\"");
+		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainstList)+"\"");
+		out.print(" linkedNodes = \""+XMLHelper.printIntList(linkedNodeList)+"\"");
 	}
 	
 	public void load(Element node) {
@@ -89,12 +93,12 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		} else {
 			id = Integer.parseInt(node.getAttributeValue("id"));
 		}
-		
+
 		hasToBeCheckedAgainstText = node.getAttributeValue("checkAgainst");
+		linkedNodeText = node.getAttributeValue("linkedNodes");
 	}
 
 	public void createID() {
-//		throw new RuntimeException();
 		id = getRootNode().getnextID();		
 	}
 
@@ -138,29 +142,37 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		}
 	}
 
-	private void addCheckAgainst(MyTreeNode myTreeNode) {
-		if(!hasToBeCheckedAgainst.contains(myTreeNode)) hasToBeCheckedAgainst.addElement(myTreeNode);
+	private void addCheckAgainst(MyTreeNode node) {
+		if(!hasToBeCheckedAgainstList.contains(node)) hasToBeCheckedAgainstList.addElement(node);
+	}
+	
+	public void addLinkedNode(MyTreeNode node) {
+		if(!linkedNodeList.contains(node)) linkedNodeList.addElement(node);
+		
 	}
 
 	public void updateLinks() {
-		if(hasToBeCheckedAgainstText != null) {
-			updateMyLinks();
-		}
+		updateMyLinks(hasToBeCheckedAgainstList, hasToBeCheckedAgainstText);
+		updateMyLinks(linkedNodeList, linkedNodeText);
 		for(int i = 0; i < getChildCount(); i++ ) {
 			((MyTreeNode)getChildAt(i)).updateLinks();
 		}
 		hasToBeCheckedAgainstText = null;
 	}
 
-	private void updateMyLinks() {
-		if("".equals(hasToBeCheckedAgainstText)) return;
-		String[] links = hasToBeCheckedAgainstText.split(";");
-		for(int i = 0; i < links.length; i++) {
-			String idS = links[i];
-			Integer id = Integer.parseInt(idS);
-			MyTreeNode node = getRootNode().findNode(id);
-			if(node == null) throw new IllegalArgumentException();
-			hasToBeCheckedAgainst.addElement(node);
+	private void updateMyLinks(Vector<MyTreeNode> list, String text) {
+		if(text != null) {
+			if("".equals(text)) return;
+			String[] links = text.split(";");
+			for(int i = 0; i < links.length; i++) {
+				String idS = links[i];
+				Integer id = Integer.parseInt(idS);
+				MyTreeNode node = getRootNode().findNode(id);
+				if(node == null) throw new IllegalArgumentException();
+				if(!(list.contains(node))) {
+					list.addElement(node);
+				}
+			}
 		}
 	}
 
@@ -221,6 +233,8 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		
 		return result;
 	}
+
+
 	
 	
 }

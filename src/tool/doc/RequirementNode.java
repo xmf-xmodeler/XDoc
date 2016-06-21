@@ -68,7 +68,6 @@ public class RequirementNode extends MyTreeNode {
 	public void save(PrintStream out) {
 		super.save(out);
 		out.print(" text = \""+XMLHelper.protectSpecialCharacters(text)+"\"");
-		out.print(" checkAgainst = \""+XMLHelper.printIntList(hasToBeCheckedAgainst)+"\"");
 	}	
 	
 	@Override
@@ -94,6 +93,11 @@ public class RequirementNode extends MyTreeNode {
 			JScrollPane textScroll = new JScrollPane(textField);
 			JLabel textLabel = new JLabel("Text");
 			
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree());
+			JLabel checkAgainstLabel = new JLabel("Check against:");
+			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree());
+			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
+			
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
 			
@@ -104,10 +108,14 @@ public class RequirementNode extends MyTreeNode {
 			layout.setHorizontalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(textLabel))
+							.addComponent(textLabel)
+							.addComponent(linkedNodesLabel)
+							.addComponent(checkAgainstLabel))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(textScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE))
+							.addComponent(textScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							.addComponent(linkedNodesBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE))
 					.addGap(GAP)
 					);
 			
@@ -118,6 +126,14 @@ public class RequirementNode extends MyTreeNode {
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(textLabel)
 							.addComponent(textScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(checkAgainstLabel)
+							.addComponent(checkAgainstBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(linkedNodesLabel)
+							.addComponent(linkedNodesBox, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					);
 		}
