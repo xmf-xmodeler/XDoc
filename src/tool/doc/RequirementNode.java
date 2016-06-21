@@ -119,13 +119,13 @@ public class RequirementNode extends MyTreeNode {
 					.addGap(GAP)
 					);
 			
-			final int BOXHEIGHT = 200;
+			final int BOXHEIGHT = 100;
 			
 			layout.setVerticalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(textLabel)
-							.addComponent(textScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT))
+							.addComponent(textScroll, BOXHEIGHT*2, BOXHEIGHT*2, BOXHEIGHT*4))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(checkAgainstLabel)

@@ -41,7 +41,7 @@ public class TestNode extends MyTreeNode {
 	}
 	
 	String title;
-	double priority;
+	double priority = 1.0;
 	long lastTestedOn;
 	String lastTestedBy = "N/A";
 	String lastResult;

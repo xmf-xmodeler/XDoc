@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class DocFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -88,6 +89,16 @@ public class DocFrame extends JFrame{
 				frame.setJMenuBar(menubar);
 
 				frame.setVisible(true);
+				
+				Timer t = new Timer(250, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						frame.repaint();
+					}
+				});
+				
+				t.start();
 			}
 		});
 	}

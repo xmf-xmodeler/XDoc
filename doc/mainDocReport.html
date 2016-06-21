@@ -1,13 +1,14 @@
 <html><head><title>Test Report</title></head><body><table border="1" width="100%">
 <tr><th>ID</th><th width="18%">Title</th><th>tested on</th><th>tested by</th><th width="55%">lastResult</th><th>check against</th></tr>
+<tr><td bgColor="#ff0000">29</td><td>Load Image 1</td><td>2016-Jun-21 14:17:08</td><td>testuser </td><td>Fail:
+No image specified yet&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">31</td><td>Load/Save/Compare</td><td>2016-Jun-21 14:18:29</td><td>testuser </td><td>Fail:
+No image specified yet&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">5</td><td>Create Class</td><td>2016-Jun-15 15:33:26</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">6</td><td>Create Class with name clash</td><td>2016-Jun-20 17:32:49</td><td>testuser
-</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">6</td><td>Create Class with name clash</td><td>2016-Jun-20 17:32:49</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">7</td><td>Create Class with invalid name</td><td>2016-Jun-16 15:33:31</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">8</td><td>Rename Class</td><td>2016-Jun-20 17:32:54</td><td>testuser
-</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">9</td><td>Rename Class with name clash</td><td>2016-Jun-20 17:32:56</td><td>testuser
-</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">8</td><td>Rename Class</td><td>2016-Jun-20 17:32:54</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">9</td><td>Rename Class with name clash</td><td>2016-Jun-20 17:32:56</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">10</td><td>Rename Class with invalid name</td><td>2016-Jun-16 15:33:29</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">11</td><td>Delete Class</td><td>2016-Jun-17 17:13:33</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">12</td><td>Create Attribute</td><td>2016-Jun-15 15:33:26</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
@@ -15,7 +16,7 @@
 <tr><td bgColor="#ff0000">14</td><td>Create Attribute with invalid name</td><td>2016-Jun-16 13:43:47</td><td>N/A</td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">15</td><td>Rename Attribute</td><td>2016-Jun-16 13:43:44</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#77bb00">16</td><td>Rename Attribute with name clash</td><td>2016-Jun-15 17:12:36</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ffee00">17</td><td>Rename Attribute with invalid name</td><td>2016-Jun-15 17:12:49</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#77bb00">17</td><td>Rename Attribute with invalid name</td><td>2016-Jun-15 17:12:49</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">18</td><td>Delete Attribute</td><td>2016-Jun-15 15:42:42</td><td>N/A</td><td>Fail:
 The console exploded with a loud "BANG"
 New console ordered. Waiting for delivery.&nbsp;</td><td>&nbsp;</td></tr>
@@ -28,7 +29,26 @@ New console ordered. Waiting for delivery.&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">25</td><td>Delete Operation</td><td>2016-Jun-15 15:42:42</td><td>N/A</td><td>Fail:
 The console exploded with a loud "BANG"
 New console ordered. Waiting for delivery.&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">29</td><td>Load Image 1</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">31</td><td>Load/Save/Compare</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff0000">34</td><td>test1</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>35&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">47</td><td>empty test</td><td>2016-Jun-21 14:10:21</td><td>testuser </td><td>Fail:
+This is an empty test to trigger the warning sign.&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">39</td><td>new Test</td><td>2016-Jun-21 14:26:37</td><td>testuser </td><td>Fail:
+This is an empty test to trigger the warning sign.&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">35</td><td>a.mod(b) on negative numbers</td><td>2016-Jun-21 14:29:01</td><td>testuser </td><td>Fail:
+While -1.mod(6) results in -1 and looks correct, as -1 and -1 are in the same class, 
+the minus is evaluated last, so we only found out that 1.mod(6) is correct.
+(-1).mod(6) is returning 1, but should return something like -1 or 5.&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">33</td><td>b = 1-a</td><td>2016-Jun-21 14:32:32</td><td>testuser
+</td><td>Fail:
+command line:
+[1] XMF> Root::test(0.1);
+9173302
+[1] XMF> Root::test(3);
+2
+Seems to be wrong in any case...&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">94</td><td>Check decreasing levels</td><td>2016-Jun-21 12:43:31</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">50</td><td>Try to create a negative level</td><td>2016-Jun-21 12:39:38</td><td>testuser </td><td>Fail:
+You can instantiate a level 0 created this way.
+You can create and instatntiate level -2 or less.
+Level -1 becomes level 3&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">46</td><td>Diagram opened twice</td><td>2016-Jun-21 12:19:58</td><td>testuser </td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
 </table></body></html>

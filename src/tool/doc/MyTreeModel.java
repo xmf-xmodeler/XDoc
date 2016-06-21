@@ -166,18 +166,21 @@ public class MyTreeModel extends DefaultTreeModel {
 	}
 
 	public void actionPaste(DefaultMutableTreeNode parent) {
-		MyTreeNode newNode = copyTree((MyTreeNode) clipboard);
-		insertNodeInto(newNode, parent, parent.getChildCount());
+//		MyTreeNode newNode = copyTree((MyTreeNode) clipboard);
+//		insertNodeInto(newNode, parent, parent.getChildCount());
+		if(clipboard == null) throw new IllegalStateException();
+		insertNodeInto(clipboard, parent, parent.getChildCount());
+		clipboard = null;
 	}
 
-	private MyTreeNode copyTree(MyTreeNode original) {
-		MyTreeNode newNode = new MyTreeNode(original.getUserObject()+"");
-		for(int i = 0; i < original.getChildCount(); i++) {
-			MyTreeNode child = (MyTreeNode) original.getChildAt(i);
-			newNode.add(copyTree(child));
-		}
-		return newNode;
-	}
+//	private MyTreeNode copyTree(MyTreeNode original) {
+//		MyTreeNode newNode = new MyTreeNode(original.getUserObject()+"");
+//		for(int i = 0; i < original.getChildCount(); i++) {
+//			MyTreeNode child = (MyTreeNode) original.getChildAt(i);
+//			newNode.add(copyTree(child));
+//		}
+//		return newNode;
+//	}
 
 	public void actionDelete(DefaultMutableTreeNode node) {
 		removeNodeFromParent(node);
