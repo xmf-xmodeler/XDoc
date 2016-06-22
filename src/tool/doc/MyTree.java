@@ -71,10 +71,10 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionRename(node);}
 				});
 				
-//				JMenuItem copyMenu = new JMenuItem("Copy");
-//				copyMenu.addActionListener(new ActionListener() {			
-//					@Override public void actionPerformed(ActionEvent e) {getModel().actionCopy(node);}
-//				});
+				JMenuItem copyMenu = new JMenuItem("Clone here");
+				copyMenu.addActionListener(new ActionListener() {			
+					@Override public void actionPerformed(ActionEvent e) {getModel().actionCopy(node);}
+				});
 				JMenuItem cutMenu = new JMenuItem("Cut");
 				cutMenu.addActionListener(new ActionListener() {			
 					@Override public void actionPerformed(ActionEvent e) {getModel().actionCut(node);}
@@ -109,7 +109,7 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 				addLinkMenu.setEnabled(getModel().canAddLink(node));
 
 				menu.add(renameMenu);
-//				menu.add(copyMenu);
+				menu.add(copyMenu);
 				menu.add(cutMenu);
 				menu.add(pasteMenu);
 				menu.add(deleteMenu);
@@ -145,8 +145,6 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 		lastSelected = node;
 		
 		getModel().showNodePanel(node);
-		
-
 	}
 
 	public void save() {

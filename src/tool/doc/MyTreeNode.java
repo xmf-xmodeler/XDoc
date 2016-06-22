@@ -19,7 +19,6 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = 1L;
 	
 	String name;
-	TreeNodeType type;
 	String content;
 	Vector<MyTreeNode> hasToBeCheckedAgainstList = new Vector<MyTreeNode>();
 	Vector<MyTreeNode> linkedNodeList = new Vector<MyTreeNode>();
@@ -102,7 +101,7 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		id = getRootNode().getnextID();		
 	}
 
-	private int getnextID() {
+	protected int getnextID() {
 		int i;
 		int iMax = 32;
 		do {
@@ -124,7 +123,7 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		return false;
 	}
 
-	private MyTreeNode getRootNode() {
+	protected MyTreeNode getRootNode() {
 		return(MyTreeNode) getRoot();
 	}
 
@@ -140,6 +139,16 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 			result.add(node);
 		}
 		return result;
+	}
+	
+	public MyTreeNode copyTree() {
+		throw new RuntimeException("Not yet implemented");
+//		MyTreeNode newNode = new MyTreeNode(this.getUserObject()+"");
+//		for(int i = 0; i < this.getChildCount(); i++) {
+//			MyTreeNode child = (MyTreeNode) this.getChildAt(i);
+//			newNode.add(child.copyTree());
+//		}
+//		return newNode;
 	}
 	
 	public void notifyChanged() {

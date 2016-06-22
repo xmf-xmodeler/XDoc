@@ -157,11 +157,12 @@ public class MyTreeModel extends DefaultTreeModel {
 	}
 
 	public void actionCopy(DefaultMutableTreeNode node) {
-		clipboard = node;		
+		MyTreeNode newNode = ((MyTreeNode) node).copyTree();
+		insertNodeInto(newNode, (DefaultMutableTreeNode) node.getParent(), node.getParent().getIndex(node)+1);	
 	}
 
 	public void actionCut(DefaultMutableTreeNode node) {
-		actionCopy(node);
+		clipboard = node;
 		actionDelete(node);
 	}
 
@@ -173,6 +174,8 @@ public class MyTreeModel extends DefaultTreeModel {
 		clipboard = null;
 	}
 
+
+	
 //	private MyTreeNode copyTree(MyTreeNode original) {
 //		MyTreeNode newNode = new MyTreeNode(original.getUserObject()+"");
 //		for(int i = 0; i < original.getChildCount(); i++) {

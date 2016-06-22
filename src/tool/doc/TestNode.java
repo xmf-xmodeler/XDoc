@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -35,6 +36,28 @@ public class TestNode extends MyTreeNode {
 		title = node.getAttributeValue("name");
 		load(node);
 	}
+	
+	@Override
+	public MyTreeNode copyTree() {
+		TestNode newNode = new TestNode(title);
+		newNode.id = getRootNode().getnextID();	
+		newNode.title = title;
+		newNode.priority = priority;
+		newNode.lastTestedOn = lastTestedOn;
+		newNode.lastTestedBy = lastTestedBy;
+		newNode.lastResult = lastResult;
+		newNode.freeText = freeText;
+		newNode.preConditions = preConditions;
+		newNode.actions = actions;
+		newNode.postconditions = postconditions;
+		newNode.hasProblem = hasProblem;
+		newNode.hasToBeCheckedAgainstList = new Vector<MyTreeNode>(hasToBeCheckedAgainstList);
+		newNode.linkedNodeList = new Vector<MyTreeNode>(linkedNodeList);
+		for(MyTreeNode node : linkedNodeList) {
+			node.linkedNodeList.add(newNode);
+		}
+		return newNode;
+	}
 
 	public String getType() {
 		return "test";
@@ -45,7 +68,6 @@ public class TestNode extends MyTreeNode {
 	long lastTestedOn;
 	String lastTestedBy = "N/A";
 	String lastResult;
-
 	String freeText = "";
 	String preConditions = "";
 	String actions = "";
