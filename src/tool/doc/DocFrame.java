@@ -161,7 +161,6 @@ public class DocFrame extends JFrame implements WindowListener{
 		}
 	}
 
-
 	@Override public void windowActivated(WindowEvent e) {}
 	@Override public void windowClosed(WindowEvent e) {}
 	@Override public void windowDeactivated(WindowEvent e) {}

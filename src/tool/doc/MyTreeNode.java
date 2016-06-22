@@ -107,9 +107,11 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 		int iMax = 32;
 		do {
 			i = new Random().nextInt(iMax);
-			iMax *= 2;
+			System.out.println("try new id " + i + "/" + iMax);
+			iMax = (iMax * 7) / 5;
 			if(iMax < 0) iMax = 32;
 		} while(numberExists(i));
+		System.out.println("id " + i + " accepted");
 		return i;
 	}
 
@@ -132,7 +134,11 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 	
 	public Vector<MyTreeNode> getDependentNodes() {
 		Vector<MyTreeNode> result = new Vector<MyTreeNode>();
-		for(int i = 0; i < parent.getChildCount(); i++ ) {}
+		for(int i = 0; i < parent.getChildCount(); i++ ) {
+		}
+		for(MyTreeNode node : linkedNodeList) {
+			result.add(node);
+		}
 		return result;
 	}
 	
@@ -210,11 +216,17 @@ public class MyTreeNode extends DefaultMutableTreeNode{
 			out.print("</th><th width=\"55%\">lastResult");
 			out.print("</th><th>check against");
 			out.print("</th></tr>\n");
+			Vector<TestNode> allTests = new Vector<TestNode>();
 			for(MyTreeNode node : allNodes) {
 				if(node instanceof TestNode) {
 					TestNode testNode = (TestNode) node;
-					testNode.report(out);
+					allTests.addElement(testNode);
 				}
+			}
+//			allTests = filterTests(allTests);
+//			allTests = sortTests(allTests);
+			for(TestNode testNode : allTests) {
+				testNode.report(out);
 			}
 			out.print("</table></body></html>");
 			out.close();

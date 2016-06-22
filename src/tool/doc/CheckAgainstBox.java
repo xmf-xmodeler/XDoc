@@ -20,8 +20,10 @@ public class CheckAgainstBox extends JScrollPane {
 	
 	private JList<MyTreeNode> list;
 	private MyTree tree;
+	private boolean onewayOnly;
+	private MyTreeNode myNode;
 
-	public CheckAgainstBox(Vector<MyTreeNode> hasToBeCheckedAgainst, MyTree tree) {
+	public CheckAgainstBox(Vector<MyTreeNode> hasToBeCheckedAgainst, MyTree tree, boolean onewayOnly, MyTreeNode myNode) {
 		MyListModel listModel = new MyListModel(hasToBeCheckedAgainst);
 		list = new JList<>(listModel);
 		list.addMouseListener(listModel);
@@ -81,6 +83,7 @@ public class CheckAgainstBox extends JScrollPane {
 		private void deleteNode(MyTreeNode selectedNode) {
 			int pos = hasToBeCheckedAgainst.indexOf(selectedNode);
 			hasToBeCheckedAgainst.remove(selectedNode);
+			if(!onewayOnly) selectedNode.hasToBeCheckedAgainstList.remove(myNode);
 			fireIntervalRemoved(this, pos, pos);
 		}
 

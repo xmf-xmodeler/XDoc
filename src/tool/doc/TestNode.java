@@ -129,9 +129,9 @@ public class TestNode extends MyTreeNode {
 
 			JButton reportTestButton = new JButton("Report Test Result");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree());
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree(), false, TestNode.this);
 			JLabel checkAgainstLabel = new JLabel("Check against:");
-			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree());
+			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree(), true, TestNode.this);
 			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
 			
 			GroupLayout layout = new GroupLayout(this);

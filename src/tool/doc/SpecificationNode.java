@@ -54,6 +54,9 @@ public class SpecificationNode extends MyTreeNode {
 			if(child instanceof TestNode)
 			result.addElement(child);
 		}
+		for(MyTreeNode node : linkedNodeList) {
+			result.add(node);
+		}
 		return result;
 	}
 	
@@ -97,9 +100,9 @@ public class SpecificationNode extends MyTreeNode {
 			JScrollPane textScroll = new JScrollPane(textField);
 			JLabel textLabel = new JLabel("Text");
 			
-			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree());
+			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree(), false, SpecificationNode.this);
 			JLabel checkAgainstLabel = new JLabel("Check against:");
-			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree());
+			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree(), true, SpecificationNode.this);
 			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
 			
 			GroupLayout layout = new GroupLayout(this);
