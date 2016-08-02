@@ -79,5 +79,20 @@
     <Node id="54" name="Recently Found Bugs" type="default" checkAgainst = "" linkedNodes = "">
       <Node id="46" name="Diagram opened twice" type="test" checkAgainst = "" linkedNodes = "" freeText = "" preConditions = "" actions = "Create class diagram in project view&#10;Open diagram once more" postconditions = "Console should not show:&#10;Cannot find element with id ... &#34; on diagram, which has been opened twice." lastResult = "Fail" priority = "0.0" lastTestedOn = "1466507998159" lastTestedBy = "testuser " hasProblem = "YES"/>
     </Node>
+    <Node id="107" name="XTools" type="default" checkAgainst = "" linkedNodes = "">
+      <Node id="60" name="General Idea" type="requirement" checkAgainst = "" linkedNodes = "" text = "In XTools you can load a Group of Classes and &#10;assign them a graphical representation.&#10;&#10;If you want to model a car, you need a Class Car, which becomes the Root. That Car does not need to apper an the diagram. &#10;Next you create classes which the car comprises: Chassis, Wheel, Frame, Door,  ... , Fluffy Dice&#10;Connect them with Attribute/Association relations as needed.&#10;&#10;You can now define Nodes and Edges in XTools. A Node represents a Class, &#10;an Edge represents a Relation.&#10;&#10;"/>
+      <Node id="32" name="Root Element" type="requirement" checkAgainst = "" linkedNodes = "" text = "A Diagram in XTools needs a Root Element which represents what is modeled"/>
+      <Node id="82" name="known Bugs" type="default" checkAgainst = "" linkedNodes = "">
+        <Node id="88" name="Ellipse has opaque white background" type="test" checkAgainst = "12" linkedNodes = "" freeText = "" preConditions = "XTools Diagram, node with button created" actions = "set node appearance to ellipse, then add two of these nodes to diagram" postconditions = "move one ellipse around until they overlap. there should be no white rectangle" lastResult = "Fail" priority = "1.0" lastTestedOn = "1470150451195" lastTestedBy = "testuser
+" hasProblem = "YES"/>
+        <Node id="12" name="can't find how to reopen the ToolType editor " type="requirement" checkAgainst = "" linkedNodes = "" text = "It should be possible to reopen the ToolType editor"/>
+        <Node id="45" name="createDiagrams menu has entry without label " type="test" checkAgainst = "" linkedNodes = "" freeText = "" preConditions = "not always reproduceable" actions = "" postconditions = "There shouldn't be such a thing as an empt ylabel" lastResult = "Fail" priority = "1.0" lastTestedOn = "1470150602162" lastTestedBy = "testuser
+" hasProblem = "YES"/>
+        <Node id="158" name="set background color to main ToolType has no effect " type="test" checkAgainst = "" linkedNodes = "" freeText = "" preConditions = "" actions = "" postconditions = "" lastResult = "Fail" priority = "1.0" lastTestedOn = "1470150625497" lastTestedBy = "testuser
+" hasProblem = "YES"/>
+        <Node id="68" name="Triangle shapes are invisble" type="test" checkAgainst = "" linkedNodes = "" freeText = "" preConditions = "Crate node with traiange shape" actions = "use node" postconditions = "see triangle" lastResult = "Fail" priority = "1.0" lastTestedOn = "1470150662303" lastTestedBy = "testuser
+" hasProblem = "YES"/>
+      </Node>
+    </Node>
   </Node>
 </XModelerDocumentation>
