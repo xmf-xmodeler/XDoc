@@ -4,55 +4,90 @@
 No image specified yet&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">31</td><td>Load/Save/Compare</td><td>2016-Jun-21 14:18:29</td><td>testuser </td><td>Fail:
 No image specified yet&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#77bb00">5</td><td>Create Class</td><td>2016-Jun-15 15:33:26</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">6</td><td>Create Class with name clash</td><td>2016-Jun-20 17:32:49</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">7</td><td>Create Class with invalid name</td><td>2016-Jun-16 15:33:31</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">8</td><td>Rename Class</td><td>2016-Jun-20 17:32:54</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">9</td><td>Rename Class with name clash</td><td>2016-Jun-20 17:32:56</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">10</td><td>Rename Class with invalid name</td><td>2016-Jun-16 15:33:29</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#77bb00">11</td><td>Delete Class</td><td>2016-Jun-17 17:13:33</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">94</td><td>Check decreasing levels</td><td>2016-Jun-21 12:43:31</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">5</td><td>Create Class</td><td>2016-Oct-04 14:27:31</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">6</td><td>Create Class with name clash</td><td>2016-Oct-04 14:28:08</td><td>testuser
+</td><td>Fail:
+It was actually possible&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">7</td><td>Create Class with invalid name</td><td>2016-Oct-04 14:29:07</td><td>testuser
+</td><td>Fail:
+Possible&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">8</td><td>Rename Class</td><td>2016-Oct-04 14:37:24</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">9</td><td>Rename Class with name clash</td><td>2016-Oct-04 14:34:17</td><td>testuser
+</td><td>Not tested. As "Create... " above failed this has to be checked anyway once that one works&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">10</td><td>Rename Class with invalid name</td><td>2016-Oct-04 14:30:03</td><td>testuser
+</td><td>Fail:
+Possible via command line&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">11</td><td>Delete Class</td><td>2016-Oct-04 14:32:36</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">48</td><td>Delete many Classes</td><td>2016-Oct-04 14:33:38</td><td>testuser
+</td><td>Fail:
+The garbage collector gets stuck&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">94</td><td>Check decreasing levels</td><td>2016-Oct-04 14:36:27</td><td>testuser
+</td><td>Fail:
+Level names >5 don't appear as M6, M7... in the Tool bar&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">50</td><td>Try to create a negative level</td><td>2016-Jun-21 12:39:38</td><td>testuser </td><td>Fail:
 You can instantiate a level 0 created this way.
-You can create and instatntiate level -2 or less.
+You can create and instantiate level -2 or less.
 Level -1 becomes level 3&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">13</td><td>Create Attribute</td><td>2016-Jun-22 11:49:03</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">15</td><td>Rename Attribute</td><td>2016-Jun-22 11:54:16</td><td>testuser </td><td>Success
-When new name 1 char longer than old, then type is not moved right&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">16</td><td>Rename Attribute with name clash</td><td>2016-Jun-22 11:57:29</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">17</td><td>Rename Attribute with invalid name</td><td>2016-Jun-22 11:58:45</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">13</td><td>Create Attribute</td><td>2016-Oct-04 14:38:16</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">15</td><td>Rename Attribute</td><td>2016-Oct-04 14:44:45</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">16</td><td>Rename Attribute with name clash</td><td>2016-Oct-04 14:44:56</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">17</td><td>Rename Attribute with invalid name</td><td>2016-Oct-04 14:45:10</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">18</td><td>Delete Attribute</td><td>2016-Jun-15 15:42:42</td><td>N/A</td><td>Fail:
 The console exploded with a loud "BANG"
 New console ordered. Waiting for delivery.&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff8800">4</td><td>Change Attribute Level</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">62</td><td>Make Attribute intrinsic I</td><td>2016-Jun-22 15:10:15</td><td>testuser </td><td>Fail
-I. III. IV. accepts&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">111</td><td>Make Attribute intrinsic II</td><td>2016-Jun-22 17:18:50</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+accepts&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">111</td><td>Make Attribute intrinsic II</td><td>2016-Oct-04 14:55:17</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">143</td><td>Make Attribute intrinsic III</td><td>2016-Jun-22 15:10:15</td><td>testuser </td><td>Fail
-I. III. IV. accepts&nbsp;</td><td>&nbsp;</td></tr>
+accepts&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">72</td><td>Make Attribute intrinsic IV</td><td>2016-Jun-22 15:10:15</td><td>testuser </td><td>Fail
-I. III. IV. accepts&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">81</td><td>Make Attribute intrinsic V</td><td>2016-Jun-22 17:18:40</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+accepts&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">81</td><td>Make Attribute intrinsic V</td><td>2016-Oct-04 14:53:24</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff8800">44</td><td>Create instance and check for slot creation</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff8800">52</td><td>Create instance and check for slot creation (intrinsic)</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">105</td><td>OperationValues General</td><td>2016-Jun-21 17:35:49</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#00bb77">406</td><td>OperationValues Integer</td><td>2016-Jun-21 17:40:11</td><td>testuser </td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#77bb00">19</td><td>Create Operation</td><td>2016-Jun-15 15:33:26</td><td>N/A</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">20</td><td>Create Operation with name clash</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">21</td><td>Create Operation with invalid name</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">22</td><td>Rename Operation</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">23</td><td>Rename Operation with name clash</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff8800">24</td><td>Rename Operation with invalid name</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff0000">25</td><td>Delete Operation</td><td>2016-Jun-15 15:42:42</td><td>N/A</td><td>Fail:
-The console exploded with a loud "BANG"
-New console ordered. Waiting for delivery.&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff0000">47</td><td>empty test</td><td>2016-Jun-21 14:10:21</td><td>testuser </td><td>Fail:
-This is an empty test to trigger the warning sign.&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td bgColor="#ff0000">39</td><td>new Test</td><td>2016-Jun-21 14:26:37</td><td>testuser </td><td>Fail:
-This is an empty test to trigger the warning sign.&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff8800">58</td><td>Create Attribute, check Slot</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff8800">132</td><td>Rename Attribute, check Slot</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff8800">77</td><td>Delete Attribute, check Slot</td><td>1970-Jan-01 01:00:00</td><td>N/A</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">105</td><td>OperationValues General</td><td>2016-Oct-04 15:26:50</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">406</td><td>OperationValues Integer</td><td>2016-Oct-04 15:28:04</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">19</td><td>Create Operation</td><td>2016-Oct-04 14:55:46</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">22</td><td>Rename Operation</td><td>2016-Oct-04 14:57:35</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">23</td><td>Rename Operation with name clash</td><td>2016-Oct-04 14:57:52</td><td>testuser
+</td><td>Fail:
+Was possible&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">24</td><td>Rename Operation with invalid name</td><td>2016-Oct-04 14:58:58</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">25</td><td>Delete Operation</td><td>2016-Oct-04 14:59:12</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">97</td><td>Large Class Name</td><td>2016-Oct-04 13:58:43</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">20</td><td>Change names</td><td>2016-Oct-04 15:26:40</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">47</td><td>empty test</td><td>2016-Oct-04 14:09:24</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#00bb77">39</td><td>new Test</td><td>2016-Oct-04 14:09:20</td><td>testuser
+</td><td>Success&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">35</td><td>a.mod(b) on negative numbers</td><td>2016-Jun-21 14:29:01</td><td>testuser </td><td>Fail:
 While -1.mod(6) results in -1 and looks correct, as -1 and -1 are in the same class, 
 the minus is evaluated last, so we only found out that 1.mod(6) is correct.
 (-1).mod(6) is returning 1, but should return something like -1 or 5.&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td bgColor="#ff0000">46</td><td>Diagram opened twice</td><td>2016-Jun-21 12:19:58</td><td>testuser </td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">88</td><td>Ellipse has opaque white background</td><td>2016-Aug-02 16:07:31</td><td>testuser </td><td>Fail&nbsp;</td><td>12&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">45</td><td>createDiagrams menu has entry without label </td><td>2016-Aug-02 16:10:02</td><td>testuser </td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">158</td><td>set background color to main ToolType has no effect </td><td>2016-Aug-02 16:10:25</td><td>testuser </td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td bgColor="#ff0000">68</td><td>Triangle shapes are invisble</td><td>2016-Aug-02 16:11:02</td><td>testuser </td><td>Fail&nbsp;</td><td>&nbsp;</td></tr>
 </table></body></html>
