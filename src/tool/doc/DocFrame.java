@@ -87,6 +87,35 @@ public class DocFrame extends JFrame implements WindowListener{
 				});
 				menu.add(menuItem3);
 				menubar.add(menu);
+				
+				JMenu menu2 = new JMenu("Test");
+				JMenuItem menuItem21 = new JMenuItem("Go to most urgent Test");
+				menuItem21.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						tree.goToMostUrgent();
+					}
+				});
+				menu2.add(menuItem21);
+				JMenuItem menuItem22 = new JMenuItem("Show most urgent Tests");
+				menuItem22.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						tree.showMostUrgent(frame);
+					}
+				});
+				menu2.add(menuItem22);
+				JMenuItem menuItem23 = new JMenuItem("Go to random Test");
+				menuItem23.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						tree.goToRandom();
+					}
+				});
+				menu2.add(menuItem23);
+				menubar.add(menu2);
+				
+								
 
 				frame.setJMenuBar(menubar);
 

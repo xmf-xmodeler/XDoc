@@ -23,7 +23,7 @@ import org.jdom2.Element;
 
 import javax.swing.GroupLayout.Alignment;
 
-public class TestNode extends MyTreeNode {
+public class TestNode extends MyTreeNode implements Comparable<TestNode>{
 	private static final long serialVersionUID = 1L;
 	
 	public TestNode(String userObject) {
@@ -94,9 +94,18 @@ public class TestNode extends MyTreeNode {
 	
 	protected int checkIsDue() {
 		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 30) return 3;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 10) return 2;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05)> 1000l * 60 * 60 * 24 * 3) return 1;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 10) return 2;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 *  3) return 1;
 		return 0;
+	}
+
+	@Override
+	public int compareTo(TestNode that) {
+		return this.getPrio().compareTo(that.getPrio());
+	}
+
+	private Double getPrio() {
+		return hasProblem?-1.:(System.currentTimeMillis() - lastTestedOn) * (priority+.05);
 	}
 
 	protected boolean hasProblem() {
@@ -342,4 +351,5 @@ public class TestNode extends MyTreeNode {
 		if(isDue == 3) return "ff8800";
 		return "000000";
 	}
+
 }

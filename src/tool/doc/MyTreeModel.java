@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -247,6 +250,33 @@ public class MyTreeModel extends DefaultTreeModel {
 
 	public boolean canAddLink(MyTreeNode node) {
 		return linkClipboard != null && node != linkClipboard;
+	}
+
+	private Vector<TestNode> allTestNodes(TreeNode node) {
+		Vector<TestNode> allTestNodes = new Vector<TestNode>();
+		if(node instanceof TestNode) allTestNodes.addElement((TestNode) node);
+		@SuppressWarnings("rawtypes")
+		Enumeration it = node.children();
+		
+		while(it.hasMoreElements()) {
+			TreeNode child = (TreeNode) (it.nextElement());
+			allTestNodes.addAll(allTestNodes(child));
+		}
+			
+		return allTestNodes;
+	}
+	
+	public Vector<TestNode> getMostUrgent(int i) {
+		Vector<TestNode> allTestNodes = allTestNodes(root);
+		Collections.sort(allTestNodes);
+		Collections.reverse(allTestNodes);
+		return new Vector<TestNode>(allTestNodes.subList(0, i));
+	}
+
+	public Vector<TestNode> getRandom(int i) {
+		Vector<TestNode> allTestNodes = allTestNodes(root);
+		Collections.shuffle(allTestNodes);
+		return new Vector<TestNode>(allTestNodes.subList(0, i));
 	}
 
 

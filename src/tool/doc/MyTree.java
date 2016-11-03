@@ -1,16 +1,22 @@
 package tool.doc;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.nio.channels.IllegalSelectorException;
+import java.util.Vector;
 
+import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 public class MyTree extends JTree implements MouseListener, TreeSelectionListener{
@@ -157,7 +163,31 @@ public class MyTree extends JTree implements MouseListener, TreeSelectionListene
 	}
 
 	public void report() {
-		getModel().report();		
+		getModel().report();
+	}
+
+	public void goToMostUrgent() {
+		Vector<TestNode> mostUrgent = getModel().getMostUrgent(1);
+		TreeNode[] path = getModel().getPathToRoot(mostUrgent.firstElement());
+		setSelectionPath(new TreePath(path));
+	}
+
+	public void showMostUrgent(Frame owner) {
+		Vector<TestNode> mostUrgent = getModel().getMostUrgent(10);
+		Top10TestsDialog dialog = new Top10TestsDialog(owner, mostUrgent);
+		dialog.setVisible(true);
+		TestNode chosenNode = dialog.getChosenNode();
+		if(chosenNode != null) {
+			TreeNode[] path = getModel().getPathToRoot(chosenNode);
+			setSelectionPath(new TreePath(path));
+		}
+			
+	}
+
+	public void goToRandom() {
+		Vector<TestNode> random = getModel().getRandom(1);
+		TreeNode[] path = getModel().getPathToRoot(random.firstElement());
+		setSelectionPath(new TreePath(path));
 	}
 
 }
