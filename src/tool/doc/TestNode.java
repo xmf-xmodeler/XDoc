@@ -93,9 +93,9 @@ public class TestNode extends MyTreeNode implements Comparable<TestNode>{
  	}
 	
 	protected int checkIsDue() {
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 30) return 3;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 * 10) return 2;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 1000l * 60 * 60 * 24 *  3) return 1;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 * 20) return 3;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  7) return 2;
+		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  3) return 1;
 		return 0;
 	}
 
