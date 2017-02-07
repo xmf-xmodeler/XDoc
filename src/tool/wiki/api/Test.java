@@ -264,6 +264,7 @@ public class Test {
 						lastResult = "Success";
 						lastTestedResultField.setText(lastResult);
 						hasProblem = false;
+						testResults.insertElementAt(new TestResult(new Date(), true, ""), 0);
 						break;
 					}
 					case JOptionPane.NO_OPTION : {
@@ -273,6 +274,7 @@ public class Test {
 						lastResult = "Fail";
 						lastTestedResultField.setText(lastResult);
 						hasProblem = true;
+						testResults.insertElementAt(new TestResult(new Date(), false, ""), 0);
 						break;
 					}
 					}
@@ -284,24 +286,47 @@ public class Test {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						wiki.setPageWiki(
-							pageName, 
+					String prefix = 
 							"==Test Results==\n" +
 							"{| class=\"wikitable mw-collapsible mw-collapsed\"\n" +
 							"! colspan=\"3\" | Test results\n" + 
 							"|-\n" + 
 							"! Date \n" + 
 							"! Result\n" + 
-							"! Comment\n" + 
+							"! Comment\n";
+					String suffix = "|}";
+					String content = "";
+					for(TestResult testResult : testResults) {
+						content = content + 
 							"|-\n" + 
-							"| Mon 11 Feb 2017 22:00:00 CET\n" + 
-							"| style=\"background: green;\" | Success ||\n" + 
-							"|-\n" + 
-							"| Mon 10 Feb 2017 21:00:00 NZDT\n" + 
-							"| style=\"background: red;\" | Fail\n" + 
-							"| Did not work...\n" + 
-							"|}\n",
+							"| " + df.format(testResult.time) + "\n" + 
+							"| style=\"background: " + (testResult.success?"green":"red") + ";\" | " + (testResult.success?"Success":"Fail") + "\n" + 
+							"| " + testResult.comment + "\n";
+					}
+					
+					String text = prefix + content + suffix;
+					
+					
+					
+					try {
+						wiki.setPageWiki(
+							pageName, 
+							text, 
+//							"==Test Results==\n" +
+//							"{| class=\"wikitable mw-collapsible mw-collapsed\"\n" +
+//							"! colspan=\"3\" | Test results\n" + 
+//							"|-\n" + 
+//							"! Date \n" + 
+//							"! Result\n" + 
+//							"! Comment\n" + 
+//							"|-\n" + 
+//							"| Mon 11 Feb 2017 22:00:00 CET\n" + 
+//							"| style=\"background: green;\" | Success ||\n" + 
+//							"|-\n" + 
+//							"| Mon 10 Feb 2017 21:00:00 NZDT\n" + 
+//							"| style=\"background: red;\" | Fail\n" + 
+//							"| Did not work...\n" + 
+//							"|}",
 							"Upload via Test Form", 
 							tocID);
 					} catch (UnsupportedEncodingException e1) {
@@ -319,6 +344,7 @@ public class Test {
 	}
 	
 //	private final static Calendar cal = new GregorianCalendar();
+	final static DateFormat df = new SimpleDateFormat("E dd MMM yyyy hh:mm:ss z");
 	
 	public void readTestResults(Element testResultTable) {
 		if(testResultTable == null) return;
@@ -328,10 +354,10 @@ public class Test {
 			if(cells.size() == 3) { // possible data row
 				
 				String dateText =  cells.get(0).getText().trim();
-				boolean result = "Success".equals(cells.get(1).getText());
-				String comment =  cells.get(0).getText().trim();
+				boolean result = "Success".equals(cells.get(1).getText().trim());
+				String comment =  cells.get(2).getText().trim();
 				
-				DateFormat df = new SimpleDateFormat("E dd MMM yyyy hh:mm:ss z");
+//				DateFormat df = new SimpleDateFormat("E dd MMM yyyy hh:mm:ss z");
 				try {
 					Date date = df.parse(dateText);
 					testResults.add(new TestResult(date, result, comment));

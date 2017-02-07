@@ -242,6 +242,10 @@ public class WikiInterface {
 					h2KeyArmed = text;
 				}
 				currentTocID = readTocID(node);
+				if("Test Results".equals(h2KeyArmed) && test != null) {
+					test.setWikiInterface(this);
+					test.addTestTocID(pageName, currentTocID);
+				}
 			}
 			if(node.getName().equals("p") && h2KeyArmed != null && !"Test Results".equals(h2KeyArmed)) {
 				test.addText(h2KeyArmed, node.getText());
@@ -249,8 +253,6 @@ public class WikiInterface {
 			}
 			if(node.getName().equals("table") && "Test Results".equals(h2KeyArmed)) {
 				test.readTestResults(node);
-				test.addTestTocID(pageName, currentTocID);
-				test.setWikiInterface(this);
 				h2KeyArmed = null;
 			}
 		}
