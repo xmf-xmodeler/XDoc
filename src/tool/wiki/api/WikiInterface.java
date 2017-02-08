@@ -71,7 +71,8 @@ public class WikiInterface {
 		int tokenEnd = tokenText.indexOf("+", tokenStart);
 		String token = tokenText.substring(tokenStart, tokenEnd);
 		
-		String result = excutePost("action=edit"
+//		String result = 
+				excutePost("action=edit"
 				+ "&title=" + pageName
 				+ "&text=" + URLEncoder.encode(text, "UTF-8")
 				+ "&summary=" + URLEncoder.encode(comment, "UTF-8")
@@ -130,7 +131,7 @@ public class WikiInterface {
 		wiki.frame.setSize(1200, 800);
 		wiki.frame.setLocation(200, 100);
 		wiki.frame.setTitle("Wiki Interface Test");
-		final DefaultMutableTreeNode root = wiki.getCategoryTree("XModeler");
+		final CategoryTreeNode root = (CategoryTreeNode) wiki.getCategoryTree("XModeler", true);
 		JTree tree = new JTree(root);
 		final JEditorPane textField = new JEditorPane();
 		textField.setContentType("text/html");
@@ -162,7 +163,7 @@ public class WikiInterface {
 			
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
+				MyTreeNode dmtn = (MyTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
 				if(dmtn instanceof TestTreeNode) {
 					split1.setRightComponent(((TestTreeNode)dmtn).test.createPanel());
 				} else try {
@@ -191,7 +192,7 @@ public class WikiInterface {
 		loadTestThread.start();
 	}
 
-	protected void loadTests(DefaultMutableTreeNode root) {
+	protected void loadTests(MyTreeNode root) {
 		Vector<Test> tests = new Vector<Test>();
 		try {
 			String html = getPageHTML(root.getUserObject()+"");
@@ -201,7 +202,7 @@ public class WikiInterface {
 //			e.printStackTrace();
 		}
 		for(int i = 0; i < root.getChildCount(); i++) {
-			loadTests((DefaultMutableTreeNode) root.getChildAt(i));
+			loadTests((MyTreeNode) root.getChildAt(i));
 		}		
 		for(Test test : tests) {
 			root.add(new TestTreeNode(test));
@@ -209,7 +210,7 @@ public class WikiInterface {
 		}
 	}
 
-	private Vector<Test> parseHTML2Meta(String html, String pageName) throws JDOMException, IOException {
+	public Vector<Test> parseHTML2Meta(String html, String pageName) throws JDOMException, IOException {
 		SAXBuilder builder = new SAXBuilder();
 		html = "<html>" + html + "</html>";
 		Document document = (Document) builder.build(new StringReader(html));
@@ -289,18 +290,20 @@ public class WikiInterface {
 		return result;
 	}
 	
-	public DefaultMutableTreeNode getCategoryTree(String categoryName) throws UnsupportedEncodingException {
-		DefaultMutableTreeNode categoryTreeNode = new CategoryTreeNode(categoryName);
-		for(String childCategoryNameWithPrefix : getCategoryMembers(categoryName, true, false)) {
+	public MyTreeNode getCategoryTree(String name, boolean isCategory) throws UnsupportedEncodingException {
+		MyTreeNode treeNode = isCategory 
+				? new CategoryTreeNode(name)
+				: new WikiPageTreeNode(name);
+		for(String childCategoryNameWithPrefix : getCategoryMembers(name, true, false)) {
 			String childCategoryName = childCategoryNameWithPrefix.substring(childCategoryNameWithPrefix.indexOf(":")+1);
-			DefaultMutableTreeNode childCategoryTreeNode = getCategoryTree(childCategoryName);
-			categoryTreeNode.add(childCategoryTreeNode);
+			MyTreeNode childCategoryTreeNode = getCategoryTree(childCategoryName,true);
+			treeNode.add(childCategoryTreeNode);
 		}
-		for(String pageName : getCategoryMembers(categoryName, false, true)) {
-			DefaultMutableTreeNode pageTreeNode = getCategoryTree(pageName);
-			categoryTreeNode.add(pageTreeNode);
+		for(String pageName : getCategoryMembers(name, false, true)) {
+			MyTreeNode pageTreeNode = getCategoryTree(pageName,false);
+			treeNode.add(pageTreeNode);
 		}
-		return categoryTreeNode;
+		return treeNode;
 	}
 
 	private static JsonObject excutePostJson(String urlParameters) {

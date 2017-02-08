@@ -300,33 +300,16 @@ public class Test {
 						content = content + 
 							"|-\n" + 
 							"| " + df.format(testResult.time) + "\n" + 
-							"| style=\"background: " + (testResult.success?"green":"red") + ";\" | " + (testResult.success?"Success":"Fail") + "\n" + 
+							"| style=\"background:" + (testResult.success?"#88bb99":"#ff5555") + ";\" | " + (testResult.success?"Success":"Fail") + "\n" + 
 							"| " + testResult.comment + "\n";
 					}
 					
 					String text = prefix + content + suffix;
-					
-					
-					
+										
 					try {
 						wiki.setPageWiki(
 							pageName, 
 							text, 
-//							"==Test Results==\n" +
-//							"{| class=\"wikitable mw-collapsible mw-collapsed\"\n" +
-//							"! colspan=\"3\" | Test results\n" + 
-//							"|-\n" + 
-//							"! Date \n" + 
-//							"! Result\n" + 
-//							"! Comment\n" + 
-//							"|-\n" + 
-//							"| Mon 11 Feb 2017 22:00:00 CET\n" + 
-//							"| style=\"background: green;\" | Success ||\n" + 
-//							"|-\n" + 
-//							"| Mon 10 Feb 2017 21:00:00 NZDT\n" + 
-//							"| style=\"background: red;\" | Fail\n" + 
-//							"| Did not work...\n" + 
-//							"|}",
 							"Upload via Test Form", 
 							tocID);
 					} catch (UnsupportedEncodingException e1) {
