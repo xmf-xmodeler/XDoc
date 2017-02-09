@@ -4,6 +4,8 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import tool.doc.MyTreeCellRenderer;
+
 public class CategoryTreeNode extends MyTreeNode{
 	private static final long serialVersionUID = 7115216766256828677L;
 
@@ -13,21 +15,10 @@ public class CategoryTreeNode extends MyTreeNode{
 
 	@Override
 	public ImageIcon getIcon(Image defaultIcon) {
-//		try {
-//			boolean hasProblem2 = true;
-//			
-//			Image icon = new ImageIcon(hasProblem2?"icons/ListError.png":"icons/List.gif").getImage();
-//			if(hasProblem2) {
-////				icon = MyTreeCellRenderer.addProblem(icon).getImage();
-//				return new ImageIcon(icon);
-//			}
-//			int checkIsDue = 0;
-//			if(checkIsDue > 0) icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
-//			return new ImageIcon(icon);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ImageIcon("icons/Error.gif") ;
-//		}
+		if(hasTests()) defaultIcon = MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CloudSmall.gif").getImage()).getImage();
+		if(hasError()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/Achtung.png").getImage()).getImage());
+		if(hasWarning()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage());
+
 		return new ImageIcon(defaultIcon);
  	}
 

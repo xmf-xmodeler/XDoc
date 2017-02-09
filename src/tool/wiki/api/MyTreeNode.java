@@ -1,10 +1,12 @@
 package tool.wiki.api;
 
+import java.awt.Component;
 import java.awt.Image;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public abstract class MyTreeNode extends DefaultMutableTreeNode {
@@ -26,6 +28,14 @@ public abstract class MyTreeNode extends DefaultMutableTreeNode {
 		return new ImageIcon(image);
 	}
 	
+	public synchronized Vector<MyTreeNode> getChildren() {
+	    Vector<MyTreeNode> result = new Vector<MyTreeNode>();
+	    	for(int i = 0; i < getChildCount(); i++) {
+	    		result.add((MyTreeNode)getChildAt(i));
+	    	}
+		return result;
+	}
+	
 	protected void loadTests(WikiInterface wiki, JFrame frame) {
 		Vector<Test> tests = new Vector<Test>();
 		try {
@@ -43,6 +53,31 @@ public abstract class MyTreeNode extends DefaultMutableTreeNode {
 			this.add(new TestTreeNode(test));
 			frame.repaint();
 		}
+	}
+
+	public boolean hasTests() {
+		for(MyTreeNode child : getChildren()) {
+			if(child.hasTests()) return true;
+		}
+		return false;
+	}
+	
+	public boolean hasWarning() {
+		for(MyTreeNode child : getChildren()) {
+			if(child.hasWarning()) return true;
+		}
+		return false;
+	}
+	
+	public boolean hasError() {
+		for(MyTreeNode child : getChildren()) {
+			if(child.hasError()) return true;
+		}
+		return false;
+	}
+
+	public Component createPanel(WikiInterface wiki) {
+		return new JPanel();
 	}
 
 }

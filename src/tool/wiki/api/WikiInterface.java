@@ -16,15 +16,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Vector;
 
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -79,8 +78,6 @@ public class WikiInterface {
 				+ (section != null ? ("&section=" + section) : "")
 				+ "&token=" + token + "%2B%5C"
 				+ "&starttimestamp=now");
-	
-//		System.out.println(result);
 	}
 
 	public String getPageHTML(String pageName) {
@@ -133,16 +130,16 @@ public class WikiInterface {
 		wiki.frame.setTitle("Wiki Interface Test");
 		final CategoryTreeNode root = (CategoryTreeNode) wiki.getCategoryTree("XModeler", true);
 		JTree tree = new JTree(root);
-		final JEditorPane textField = new JEditorPane();
-		textField.setContentType("text/html");
-		final JEditorPane wikiField = new JEditorPane();
-		final JEditorPane metaField = new JEditorPane();
-		JSplitPane split3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(wikiField),  new JScrollPane(metaField));
-		JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(textField),  split3);	
-		final JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree),  split2);
-		split1.setDividerLocation(400);
-		split2.setDividerLocation(400);
-		split3.setDividerLocation(400);
+//		final JEditorPane textField = new JEditorPane();
+//		textField.setContentType("text/html");
+//		final JEditorPane wikiField = new JEditorPane();
+//		final JEditorPane metaField = new JEditorPane();
+//		JSplitPane split3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(wikiField),  new JScrollPane(metaField));
+//		JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(textField),  split3);	
+		final JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree),  new JPanel());
+//		split1.setDividerLocation(400);
+//		split2.setDividerLocation(400);
+//		split3.setDividerLocation(400);
 		
 		tree.setCellRenderer(new MyTreeCellRenderer());
 		
@@ -164,18 +161,20 @@ public class WikiInterface {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				MyTreeNode dmtn = (MyTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
-				if(dmtn instanceof TestTreeNode) {
-					split1.setRightComponent(((TestTreeNode)dmtn).test.createPanel());
-				} else try {
-					String html = wiki.getPageHTML(dmtn.getUserObject()+"");
-					textField.setText(html);
-					wikiField.setText(wiki.getPageWiki(dmtn.getUserObject()+""));
-					metaField.setText(html);
-//					metaField.setText(parseHTML2Meta(html).toString());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				int div = split1.getDividerLocation();
+				split1.setRightComponent(dmtn.createPanel(wiki));
+				split1.setDividerLocation(div);
+//				if(dmtn instanceof TestTreeNode) {
+//					split1.setRightComponent(((TestTreeNode)dmtn).test.createPanel());
+//				} else try {
+//					String html = wiki.getPageHTML(dmtn.getUserObject()+"");
+//					textField.setText(html);
+//					wikiField.setText(wiki.getPageWiki(dmtn.getUserObject()+""));
+//					metaField.setText(html);
+////					metaField.setText(parseHTML2Meta(html).toString());
+//				} catch (Exception e1) {
+//					e1.printStackTrace();
+//				}
 			}
 		});
 		
@@ -249,8 +248,12 @@ public class WikiInterface {
 				}
 			}
 			if(node.getName().equals("p") && h2KeyArmed != null && !"Test Results".equals(h2KeyArmed)) {
-				test.addText(h2KeyArmed, node.getText());
-				h2KeyArmed = null;
+				String text = node.getText();
+				
+				if(text == null || "".equals(text.trim())) {
+					text = "Empty <p> node: "+node;
+				}
+				test.addText(h2KeyArmed, text);
 			}
 			if(node.getName().equals("table") && "Test Results".equals(h2KeyArmed)) {
 				test.readTestResults(node);

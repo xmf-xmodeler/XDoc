@@ -6,9 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.swing.GroupLayout;
@@ -26,17 +25,17 @@ import javax.swing.GroupLayout.Alignment;
 
 public class Test {
 	private String testName;
-	private String preCondition;
-	private String postCondition;
-	private String action;
+	private String preCondition="";
+	private String postCondition="";
+	private String action="";
 	private Vector<TestResult> testResults = new Vector<TestResult>();
 	
 	double priority = 1.0;
-	long lastTestedOn;
-	String lastTestedBy = "N/A";
-	String lastResult;
-	String freeText = "";
-	boolean hasProblem;
+//	long lastTestedOn;
+//	String lastTestedBy = "N/A";
+//	String lastResult;
+//	String freeText = "";
+//	boolean hasProblem;
 	
 	public Test(String testName) {
 		this.testName = testName;
@@ -45,6 +44,14 @@ public class Test {
 	public String getTestName() {
 		return testName;
 	}
+	
+	final static String dfPattern = "E dd MMM yyyy k:mm:ss z";
+	final static DateFormat df = new SimpleDateFormat(dfPattern, new Locale("en"));
+
+//	static {
+//		df.setTimeZone(TimeZone.getDefault());
+//		System.err.println(df.getTimeZone());
+//	}
 	
 //	public void setTestName(String testName) {
 //		this.testName = testName;
@@ -69,7 +76,10 @@ public class Test {
 //	}
 	
 	public boolean isValid() {
-		return testName != null && preCondition != null && postCondition != null && action != null;
+		return !"".equals(testName) 
+				&& !"".equals(preCondition)
+				&& !"".equals(postCondition)
+				&& !"".equals(action);
 	}
 	@Override
 	public String toString() {
@@ -78,23 +88,22 @@ public class Test {
 	}
 	public void addText(String key, String text) {
 		if("Preconditions".equals(key)) {
-			preCondition = text;
+			preCondition += text;
 		}
 		if("Action".equals(key)) {
-			action = text;
+			action += text;
 		}
 		if("Postconditions".equals(key)) {
-			postCondition = text;
+			postCondition += text;
 		}
 	}
 
-
-	protected int checkIsDue() {
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 * 20) return 3;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  7) return 2;
-		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  3) return 1;
-		return 0;
-	}
+//	protected int checkIsDue() {
+//		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 * 20) return 3;
+//		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  7) return 2;
+//		if((System.currentTimeMillis() - lastTestedOn) * (priority+.05) > 2000l * 60 * 60 * 24 *  3) return 1;
+//		return 0;
+//	}
 
 //	@Override
 //	public int compareTo(Test that) {
@@ -127,15 +136,15 @@ public class Test {
 		private static final long serialVersionUID = 1L;
 
 		private TestPanel() {
-			freeTextField = new JTextArea(freeText);
+			freeTextField = new JTextArea("EMPTY");
 			preField = new JTextArea(preCondition);
 			actionField = new JTextArea(action);
 			postField = new JTextArea(postCondition);
 
 			lastTestedOnField = new JTextField();
 			lastTestedOnField.setEditable(false);
-			setlastTestedOnDate();
-			lastTestedResultField = new JTextArea(lastResult);
+//			setlastTestedOnDate();
+			lastTestedResultField = new JTextArea("EMPTY");
 			priorityField = new JTextField(priority+"");
 
 			JScrollPane freeTextScroll = new JScrollPane(freeTextField);
@@ -258,23 +267,23 @@ public class Test {
 							JOptionPane.QUESTION_MESSAGE, null);
 					switch(result) {
 					case JOptionPane.YES_OPTION : {
-						lastTestedOn = System.currentTimeMillis();
-						lastTestedBy = "todo";//DocFrame.user;
-						setlastTestedOnDate();
-						lastResult = "Success";
-						lastTestedResultField.setText(lastResult);
-						hasProblem = false;
-						testResults.insertElementAt(new TestResult(new Date(), true, ""), 0);
+//						lastTestedOn = System.currentTimeMillis();
+//						lastTestedBy = "todo";//DocFrame.user;
+//						setlastTestedOnDate();
+//						lastResult = "Success";
+//						lastTestedResultField.setText(lastResult);
+//						hasProblem = false;
+						testResults.insertElementAt(new TestResult(new Date(), true, "", null), 0);
 						break;
 					}
 					case JOptionPane.NO_OPTION : {
-						lastTestedOn = System.currentTimeMillis();
-						lastTestedBy = "todo";//DocFrame.user;
-						setlastTestedOnDate();
-						lastResult = "Fail";
-						lastTestedResultField.setText(lastResult);
-						hasProblem = true;
-						testResults.insertElementAt(new TestResult(new Date(), false, ""), 0);
+//						lastTestedOn = System.currentTimeMillis();
+//						lastTestedBy = "todo";//DocFrame.user;
+//						setlastTestedOnDate();
+//						lastResult = "Fail";
+//						lastTestedResultField.setText(lastResult);
+//						hasProblem = true;
+						testResults.insertElementAt(new TestResult(new Date(), false, "", null), 0);
 						break;
 					}
 					}
@@ -297,6 +306,7 @@ public class Test {
 					String suffix = "|}";
 					String content = "";
 					for(TestResult testResult : testResults) {
+						df.setTimeZone(testResult.timeZone);
 						content = content + 
 							"|-\n" + 
 							"| " + df.format(testResult.time) + "\n" + 
@@ -320,14 +330,13 @@ public class Test {
 			});
 		}
 
-		private void setlastTestedOnDate() {
-			lastTestedOnField.setText(new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss").format(new Date(lastTestedOn)));			
-		}
+//		private void setlastTestedOnDate() {
+//			lastTestedOnField.setText(new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss").format(new Date(lastTestedOn)));			
+//		}
 		
 	}
 	
 //	private final static Calendar cal = new GregorianCalendar();
-	final static DateFormat df = new SimpleDateFormat("E dd MMM yyyy hh:mm:ss z");
 	
 	public void readTestResults(Element testResultTable) {
 		if(testResultTable == null) return;
@@ -340,18 +349,15 @@ public class Test {
 				boolean result = "Success".equals(cells.get(1).getText().trim());
 				String comment =  cells.get(2).getText().trim();
 				
-//				DateFormat df = new SimpleDateFormat("E dd MMM yyyy hh:mm:ss z");
 				try {
+					SimpleDateFormat df = new SimpleDateFormat(dfPattern, new Locale("en"));
 					Date date = df.parse(dateText);
-					testResults.add(new TestResult(date, result, comment));
-//					System.err.println("date: " + date);
+					testResults.add(new TestResult(date, result, comment, df.getTimeZone()));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-		System.err.println("testResults: " + testResults);
 	}
 
 	public void addTestTocID(String pageName, String tocID) {
@@ -361,6 +367,16 @@ public class Test {
 	
 	public void setWikiInterface(WikiInterface wiki) {
 		this.wiki = wiki;
+	}
+
+	public boolean hasWarning() {
+		return testResults.isEmpty() ||
+				System.currentTimeMillis() - testResults.firstElement().time.getTime() > 1000l * 60 * 60 * 24 *  7;
+	}
+
+	public boolean hasError() {
+		if(testResults.isEmpty()) return false; // test
+		return testResults.isEmpty() ||! testResults.firstElement().success;
 	}
 
 }

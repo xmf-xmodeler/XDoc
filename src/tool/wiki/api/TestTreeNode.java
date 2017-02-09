@@ -1,5 +1,6 @@
 package tool.wiki.api;
 
+import java.awt.Component;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -19,15 +20,16 @@ public class TestTreeNode extends MyTreeNode{
 	@Override
 	public ImageIcon getIcon(Image defaultIcon) {
 		try {
-			boolean hasProblem2 = test.hasProblem;//||!test.hasToBeCheckedAgainstList.isEmpty();
+			boolean hasProblem = test.hasError();//test.hasProblem;//||!test.hasToBeCheckedAgainstList.isEmpty();
 			
-			Image icon = new ImageIcon(hasProblem2?"icons/ListError.png":"icons/List.gif").getImage();
-			if(hasProblem2) {
+			Image icon = new ImageIcon(hasProblem?"icons/ListError.png":"icons/List.gif").getImage();
+			if(hasProblem) {
 				icon = MyTreeCellRenderer.addProblem(icon).getImage();
 				return new ImageIcon(icon);
 			}
-			int checkIsDue = 0;
-			if(checkIsDue > 0) icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
+//			int checkIsDue = 0;
+			if(test.hasWarning()) //icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
+				icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage();
 			return new ImageIcon(icon);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,4 +37,17 @@ public class TestTreeNode extends MyTreeNode{
 		}
  	}
 
+	@Override
+	public boolean hasTests() {return true;}
+	
+	@Override
+	public boolean hasWarning() {return test.hasWarning();}
+	
+	@Override
+	public boolean hasError() {return test.hasError();}
+
+	@Override
+	public Component createPanel(WikiInterface wiki) {
+		return test.createPanel();
+	}
 }
