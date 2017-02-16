@@ -15,9 +15,9 @@ public class CategoryTreeNode extends MyTreeNode{
 
 	@Override
 	public ImageIcon getIcon(Image defaultIcon) {
-		if(hasTests()) defaultIcon = MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CloudSmall.gif").getImage()).getImage();
-		if(hasError()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/Achtung.png").getImage()).getImage());
-		if(hasWarning()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage());
+//		if(hasTests()) defaultIcon = MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CloudSmall.gif").getImage()).getImage();
+//		if(hasError()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/Achtung.png").getImage()).getImage());
+//		if(hasWarning()) return new ImageIcon(MyTreeCellRenderer.addIcon(defaultIcon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage());
 
 		return new ImageIcon(defaultIcon);
  	}

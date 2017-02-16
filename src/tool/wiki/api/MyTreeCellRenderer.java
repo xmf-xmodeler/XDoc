@@ -24,17 +24,18 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 		}
 		
 		MyTreeNode node = (MyTreeNode) value;
-
-//		l.setText("(" + node.id + ") " + l.getText());
 		
 		try{
-			ImageIcon icon = node.getIcon(((ImageIcon)l.getIcon()).getImage());
-			if(icon != null) {l.setIcon(icon);}
+			Image icon = node.getIcon(((ImageIcon)l.getIcon()).getImage()).getImage();
+			if(node.hasTests() &&! (node instanceof TestTreeNode)) icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CloudSmall.gif").getImage()).getImage();
+			if(node.hasError()) icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/Achtung.png").getImage()).getImage();
+			else if(node.hasWarning()) icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage();
+			if(icon != null) {l.setIcon(new ImageIcon(icon));}
 		} catch (Exception e) {
 			System.err.println("\t\t\t\tTrouble with icon. Using default.");
 		}
 		
-		
+
 		return defaultResult;
 	}
 	

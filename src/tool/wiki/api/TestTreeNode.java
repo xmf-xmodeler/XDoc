@@ -28,8 +28,8 @@ public class TestTreeNode extends MyTreeNode{
 				return new ImageIcon(icon);
 			}
 //			int checkIsDue = 0;
-			if(test.hasWarning()) //icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
-				icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage();
+//			if(test.hasWarning()) //icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
+//				icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CalYellow.gif").getImage()).getImage();
 			return new ImageIcon(icon);
 		} catch (Exception e) {
 			e.printStackTrace();

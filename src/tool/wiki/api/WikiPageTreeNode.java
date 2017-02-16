@@ -26,8 +26,8 @@ public class WikiPageTreeNode extends MyTreeNode{
 //				icon = MyTreeCellRenderer.addProblem(icon).getImage();
 //				return new ImageIcon(icon);
 //			}
-			int checkIsDue = 0;
-			if(checkIsDue > 0) icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
+//			int checkIsDue = 0;
+//			if(checkIsDue > 0) icon = MyTreeCellRenderer.addClock(icon, checkIsDue).getImage();
 			if(hasTests()) icon = MyTreeCellRenderer.addIcon(icon, new ImageIcon("icons/CloudSmall.gif").getImage()).getImage();
 			return new ImageIcon(icon);
 		} catch (Exception e) {
