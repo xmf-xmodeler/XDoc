@@ -56,12 +56,14 @@ public class WikiInterface {
 		
 		token = token.substring(0, token.length()-2) + "%2B%5C";
 
-		String result = excutePost("action=login"
+		JsonObject loginResult = excutePostJson("action=login"
 				+ "&lgname=" + user
 				+ "&lgpassword=" + pass
 				+ "&lgtoken=" + token);
+		
+		String result = loginResult+"";
 
-		if(!result.contains("\"result\": \"Success\"")) throw new RuntimeException("Login failed: " + result);
+		if(!result.contains("\"result\":\"Success\"")) throw new RuntimeException("Login failed: " + result);
 	}
 	
 	public void setPageWiki(String pageName, String text, String comment, String section) throws UnsupportedEncodingException {
@@ -284,6 +286,8 @@ public class WikiInterface {
 			categories&&!pages?"&cmtype=subcat":"&cmtype=page";
 		JsonObject o = excutePostJson("action=query&list=categorymembers&cmtitle=Category:"+categoryName+options);
 		o = o.get("query").getAsJsonObject();
+		
+		System.err.println(o);
 
 		JsonArray list = o.get("categorymembers").getAsJsonArray();
 		Vector<String> result = new Vector<String>();
@@ -316,7 +320,7 @@ public class WikiInterface {
 	
 	@Deprecated
 	private static String excutePost(String urlParameters) {
-		String targetURL = "https://www.wi-inf.uni-duisburg-essen.de/um-wiki/api.php";
+		String targetURL = "https://www.wi-inf.uni-duisburg-essen.de/xmodeler-wiki/api.php";
 	    URL url;
 	    HttpURLConnection connection = null;  
 	    try {
