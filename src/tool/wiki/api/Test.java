@@ -2,6 +2,8 @@ package tool.wiki.api;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -265,6 +267,7 @@ public class Test {
 							"Report Test Result", 
 							JOptionPane.YES_NO_CANCEL_OPTION, 
 							JOptionPane.QUESTION_MESSAGE, null);
+					String comment = freeTextField.getText();
 					switch(result) {
 					case JOptionPane.YES_OPTION : {
 //						lastTestedOn = System.currentTimeMillis();
@@ -273,7 +276,7 @@ public class Test {
 //						lastResult = "Success";
 //						lastTestedResultField.setText(lastResult);
 //						hasProblem = false;
-						testResults.insertElementAt(new TestResult(new Date(), true, "", null), 0);
+						testResults.insertElementAt(new TestResult(new Date(), true, comment, null, getUser()), 0);
 						break;
 					}
 					case JOptionPane.NO_OPTION : {
@@ -283,7 +286,7 @@ public class Test {
 //						lastResult = "Fail";
 //						lastTestedResultField.setText(lastResult);
 //						hasProblem = true;
-						testResults.insertElementAt(new TestResult(new Date(), false, "", null), 0);
+						testResults.insertElementAt(new TestResult(new Date(), false, comment, null, getUser()), 0);
 						break;
 					}
 					}
@@ -298,11 +301,13 @@ public class Test {
 					String prefix = 
 							"==Test Results==\n" +
 							"{| class=\"wikitable mw-collapsible mw-collapsed\"\n" +
-							"! colspan=\"3\" | Test results\n" + 
+							"! colspan=\"5\" | Test results\n" + 
 							"|-\n" + 
 							"! Date \n" + 
 							"! Result\n" + 
-							"! Comment\n";
+							"! Comment\n" +
+							"! User\n" +
+							"! Version\n";
 					String suffix = "|}";
 					String content = "";
 					for(TestResult testResult : testResults) {
@@ -311,7 +316,9 @@ public class Test {
 							"|-\n" + 
 							"| " + df.format(testResult.time) + "\n" + 
 							"| style=\"background:" + (testResult.success?"#88bb99":"#ff5555") + ";\" | " + (testResult.success?"Success":"Fail") + "\n" + 
-							"| " + testResult.comment + "\n";
+							"| " + testResult.comment + "\n" +
+							"| " + testResult.user + "\n" +
+							"| " + testResult.version + "\n";
 					}
 					
 					String text = prefix + content + suffix;
@@ -343,16 +350,21 @@ public class Test {
 		testResults = new Vector<TestResult>();
 		for(Element row : testResultTable.getChildren()) {
 			Vector<Element> cells = new Vector<Element>(row.getChildren("td"));
-			if(cells.size() == 3) { // possible data row
+			if(cells.size() >= 3) { // possible data row
 				
 				String dateText =  cells.get(0).getText().trim();
 				boolean result = "Success".equals(cells.get(1).getText().trim());
 				String comment =  cells.get(2).getText().trim();
-				
+				//get Username
+				String user = "";
+				if (cells.size() >= 4)	{user = cells.get(3).getText().trim();}
+				//get Version
+				String version = "";
+				if (cells.size() >= 5)	{version = cells.get(4).getText().trim();}
 				try {
 					SimpleDateFormat df = new SimpleDateFormat(dfPattern, new Locale("en"));
 					Date date = df.parse(dateText);
-					testResults.add(new TestResult(date, result, comment, df.getTimeZone()));
+					testResults.add(new TestResult(date, result, comment, df.getTimeZone(), user, version));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -378,5 +390,16 @@ public class Test {
 		if(testResults.isEmpty()) return false; // test
 		return testResults.isEmpty() ||! testResults.firstElement().success;
 	}
-
+	
+	public String getUser(){
+		String user = null;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("wiki-user.txt"));
+			user = br.readLine();
+			br.close();
+		}
+		catch (Exception e){
+		}
+		return (user==null) ? "" : user;
+	}
 }
