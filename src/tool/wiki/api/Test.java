@@ -18,8 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import org.jdom2.Element;
 
@@ -127,12 +129,14 @@ public class Test {
 	JTextArea actionField;
 	JTextArea postField;
 	
-	JTextField lastTestedOnField;
+	//JTextField lastTestedOnField;
 	JTextArea lastTestedResultField;
 	JTextField priorityField;
+	JTextField versionField;
 	private String tocID;
 	private WikiInterface wiki;
 	private String pageName;
+	JTable resultTable;
 		
 	private class TestPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
@@ -143,29 +147,42 @@ public class Test {
 			actionField = new JTextArea(action);
 			postField = new JTextArea(postCondition);
 
-			lastTestedOnField = new JTextField();
-			lastTestedOnField.setEditable(false);
+			//lastTestedOnField = new JTextField();
+			//lastTestedOnField.setEditable(false);
 //			setlastTestedOnDate();
 			lastTestedResultField = new JTextArea("EMPTY");
 			priorityField = new JTextField(priority+"");
-
+			versionField = new JTextField("1.0.2");
 			JScrollPane freeTextScroll = new JScrollPane(freeTextField);
 			JScrollPane preScroll = new JScrollPane(preField);
 			JScrollPane actionScroll = new JScrollPane(actionField);
 			JScrollPane postScroll = new JScrollPane(postField);
-			JScrollPane resultScroll = new JScrollPane(lastTestedResultField);
+			//JScrollPane resultScroll = new JScrollPane(lastTestedResultField);
 
 			JLabel freeTextLabel = new JLabel("Comment");
 			JLabel preLabel = new JLabel("Preconditions");
 			JLabel actionLabel = new JLabel("Action");
 			JLabel postLabel = new JLabel("Postconditions");
+			JLabel versionLabel = new JLabel("Version");
 
-			JLabel lastTestedOnLabel = new JLabel("Last tested");
-			JLabel lastTestedResultLabel = new JLabel("Result");
+			//JLabel lastTestedOnLabel = new JLabel("Last tested");
+			//JLabel lastTestedResultLabel = new JLabel("Result");
 			JLabel priorityLabel = new JLabel("Priority");
 
 			JButton reportTestButton = new JButton("Report Test Result");
 			JButton uploadButton = new JButton("Save (UM-Wiki:"+pageName+"/"+tocID+")");
+			
+			JLabel tableLabel = new JLabel("Last results");
+			DefaultTableModel tableModel = new DefaultTableModel();
+			tableModel.addColumn("Date");
+			tableModel.addColumn("Success");
+			tableModel.addColumn("Comment");
+			tableModel.addColumn("User");
+			tableModel.addColumn("Version");
+			for (TestResult test : testResults){
+				tableModel.addRow(test.getContent());
+			}
+			resultTable = new JTable(tableModel);
 			
 //			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree(), false, TestNode.this);
 //			JLabel checkAgainstLabel = new JLabel("Check against:");
@@ -183,31 +200,36 @@ public class Test {
 			layout.setHorizontalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(freeTextLabel)
 							.addComponent(preLabel)
 							.addComponent(actionLabel)
 							.addComponent(postLabel)
-							.addComponent(lastTestedOnLabel)
-							.addComponent(lastTestedResultLabel)
+						//	.addComponent(lastTestedOnLabel)
+							.addComponent(freeTextLabel)
+							//.addComponent(lastTestedResultLabel)
 							.addComponent(priorityLabel)
+							.addComponent(versionLabel)
 //							.addComponent(checkAgainstLabel)
 //							.addComponent(linkedNodesLabel)
+							.addComponent(tableLabel)
 							)
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-							.addComponent(freeTextScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(preScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(actionScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(postScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
-							.addComponent(lastTestedOnField, 150,150,150)
-							.addComponent(resultScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+						//	.addComponent(lastTestedOnField, 150,150,150)
+							.addComponent(freeTextScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
+							//.addComponent(resultScroll, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addComponent(priorityField, 60,60,60)
+							.addComponent(versionField, 60,60,60)
 //							.addComponent(checkAgainstBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 //							.addComponent(linkedNodesBox, BOXWIDTH, BOXWIDTH, Integer.MAX_VALUE)
 							.addGroup(layout.createSequentialGroup()
 									.addComponent(reportTestButton)
 									.addGap(GAP)
-									.addComponent(uploadButton)))
+									.addComponent(uploadButton))
+							.addComponent(resultTable)
+							)
 					.addGap(GAP)
 					);
 			
@@ -215,9 +237,7 @@ public class Test {
 			
 			layout.setVerticalGroup(layout.createSequentialGroup()
 					.addGap(GAP)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(freeTextLabel)
-							.addComponent(freeTextScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+					
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(preLabel)
@@ -231,17 +251,24 @@ public class Test {
 							.addComponent(postLabel)
 							.addComponent(postScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lastTestedOnLabel)
-							.addComponent(lastTestedOnField))
+					//.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+					//		.addComponent(lastTestedOnLabel)
+					//		.addComponent(lastTestedOnField))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lastTestedResultLabel)
-							.addComponent(resultScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+							.addComponent(freeTextLabel)
+							.addComponent(freeTextScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
+					//.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+					//		.addComponent(lastTestedResultLabel)
+					//		.addComponent(resultScroll, BOXHEIGHT, BOXHEIGHT, BOXHEIGHT*2))
 					.addGap(GAP)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(priorityLabel)
 							.addComponent(priorityField))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(versionLabel)
+							.addComponent(versionField))
 //					.addGap(GAP)
 //					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 //							.addComponent(checkAgainstLabel)
@@ -254,6 +281,10 @@ public class Test {
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(reportTestButton)
 							.addComponent(uploadButton))
+					.addGap(GAP)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(tableLabel)
+							.addComponent(resultTable))
 					.addGap(GAP)
 					);
 			
@@ -268,6 +299,7 @@ public class Test {
 							JOptionPane.YES_NO_CANCEL_OPTION, 
 							JOptionPane.QUESTION_MESSAGE, null);
 					String comment = freeTextField.getText();
+					String version = versionField.getText();
 					switch(result) {
 					case JOptionPane.YES_OPTION : {
 //						lastTestedOn = System.currentTimeMillis();
@@ -276,7 +308,7 @@ public class Test {
 //						lastResult = "Success";
 //						lastTestedResultField.setText(lastResult);
 //						hasProblem = false;
-						testResults.insertElementAt(new TestResult(new Date(), true, comment, null, getUser()), 0);
+						testResults.insertElementAt(new TestResult(new Date(), true, comment, null, getUser(), version), 0);
 						break;
 					}
 					case JOptionPane.NO_OPTION : {
@@ -286,7 +318,7 @@ public class Test {
 //						lastResult = "Fail";
 //						lastTestedResultField.setText(lastResult);
 //						hasProblem = true;
-						testResults.insertElementAt(new TestResult(new Date(), false, comment, null, getUser()), 0);
+						testResults.insertElementAt(new TestResult(new Date(), false, comment, null, getUser(), version), 0);
 						break;
 					}
 					}
@@ -402,4 +434,6 @@ public class Test {
 		}
 		return (user==null) ? "" : user;
 	}
+	
 }
+

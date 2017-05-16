@@ -19,8 +19,10 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -62,8 +64,33 @@ public class WikiInterface {
 				+ "&lgtoken=" + token);
 		
 		String result = loginResult+"";
-
-		if(!result.contains("\"result\":\"Success\"")) throw new RuntimeException("Login failed: " + result);
+		System.out.println(result);
+		//if(!result.contains("\"result\":\"Success\"")) throw new RuntimeException("Login failed: " + result);
+		//create Loginwindow, if connection fails
+		if(!result.contains("\"result\":\"Success\"")) {
+			JTextField fieldUser = new JTextField();
+			JPasswordField fieldPassword = new JPasswordField();
+			Object[] Inputs = { "Please enter Username and Password",
+					"Username: ", fieldUser,
+					"Password: ", fieldPassword};
+			int option = JOptionPane.showConfirmDialog(null, Inputs,"Wrong username or password",JOptionPane.OK_CANCEL_OPTION,JOptionPane.ERROR_MESSAGE);
+			if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION){
+				throw new RuntimeException("Login failed: " + result);
+			}
+			this.user = fieldUser.getText();
+			this.pass = new String(fieldPassword.getPassword());
+			
+			try{
+			PrintStream out = new PrintStream("wiki-user.txt");
+			out.println(this.user);
+			out.append(this.pass);
+			out.close();
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
+			login(this.user,this.pass);
+		}
 	}
 	
 	public void setPageWiki(String pageName, String text, String comment, String section) throws UnsupportedEncodingException {
@@ -399,13 +426,23 @@ public class WikiInterface {
 				File file2 = new File("wiki-user.txt");
 				PrintStream out;
 				out = new PrintStream(file2, "UTF-8");
-				out.println("wikiUserName");
-				out.println("wikiPassword");
-				user = "void";
-				pass = "void";
+				JTextField fieldUser = new JTextField();
+				JPasswordField fieldPassword = new JPasswordField();
+				Object[] Inputs = { "Please enter Username and Password",
+						"Username: ", fieldUser,
+						"Password: ", fieldPassword};
+				int option = JOptionPane.showConfirmDialog(null, Inputs,"Logindata is missing",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+				if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION){
+					out.close();
+					System.exit(0);
+				}
+				out.println(fieldUser.getText());
+				out.println(fieldPassword.getPassword());
+				user = fieldUser.getText();
+				pass = new String(fieldPassword.getPassword());
 				out.close();
-				JOptionPane.showMessageDialog(parent, "No username found. Write name into wiki-user.txt and restart");
-				System.exit(0);
+				//JOptionPane.showMessageDialog(parent, "No username found. Write name into wiki-user.txt and restart");
+				//System.exit(0);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {

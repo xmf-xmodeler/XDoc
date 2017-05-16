@@ -45,4 +45,8 @@ public class TestResult {
 	public String toString() {
 		return "TestResult [time=" + time + ", success=" + success + ", comment=" + comment + "]";
 	}
+	
+	public Object[] getContent(){
+		return new Object[]{time,success?"Success":"Fail",comment,user,version};
+	}
 }
