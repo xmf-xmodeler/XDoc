@@ -1,9 +1,7 @@
-package tool.wiki.api;
+package tool.wiki.api.FX;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -19,21 +17,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -44,15 +34,38 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
-public class WikiInterface {
+
+public class WikiInterfaceFX extends Application {
 	
 	private String user;
 	private String pass;
 	private ArrayList<Test> changedTests;
 	private String testedVersion;
+	WikiInterfaceFX wiki ;
 		
-	public WikiInterface() {
+	public WikiInterfaceFX() {
 		System.setProperty("jsse.enableSNIExtension", "false");
 		
 		java.net.CookieManager cm = new java.net.CookieManager();
@@ -146,127 +159,28 @@ public class WikiInterface {
 	}
 	
 	JFrame frame;
-
+	Scene scene;
+	MenuBar menuBar;
+	
 	public static void main(String[] args) throws Exception {
 		
-		final WikiInterface wiki = new WikiInterface();
-
-		wiki.readUser(null);
-		wiki.login(wiki.user, wiki.pass);
-		
-		wiki.changedTests = new ArrayList<Test>();
-//		String wikiText = wiki.getPageWiki("Hauptseite");
-		
-//		String htmlText = wiki.getPageHTML("Hauptseite");
-		
-//		wiki.setPageWiki("APITestPage", "Hier kommt der neue Text", "Edit via API", null);
-		
-//		System.out.println(wiki.getCategoryMembers("XModeler", true, false));
-		
-		wiki.frame = new JFrame();
-		wiki.createMenuBar();
-		wiki.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		wiki.frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e){
-				if (!wiki.changedTests.isEmpty()){
-					int result = JOptionPane.showConfirmDialog(wiki.frame,
-							"There are unsaved test results, would you like to submit them?",
-							"Confirm Dialog",
-							JOptionPane.YES_NO_CANCEL_OPTION);
-					switch(result){
-					case JOptionPane.YES_OPTION :	wiki.saveChanges(); System.exit(0);	break;
-					case JOptionPane.NO_OPTION :	System.exit(0);	break;		
-					case JOptionPane.CANCEL_OPTION: break;
-					case JOptionPane.CLOSED_OPTION : break;
-					}
-				}
-				else
-					System.exit(0);
-			}	
-		});
-		wiki.frame.setSize(1200, 800);
-		wiki.frame.setLocation(200, 100);
-		wiki.frame.setTitle("Wiki Interface Test");
-		wiki.versionDialog();
-		final CategoryTreeNode root = (CategoryTreeNode) wiki.getCategoryTree("XModeler", true);
-		JTree tree = new JTree(root);
-//		final JEditorPane textField = new JEditorPane();
-//		textField.setContentType("text/html");
-//		final JEditorPane wikiField = new JEditorPane();
-//		final JEditorPane metaField = new JEditorPane();
-//		JSplitPane split3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(wikiField),  new JScrollPane(metaField));
-//		JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(textField),  split3);	
-		final JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree),  new JPanel());
-//		split1.setDividerLocation(400);
-//		split2.setDividerLocation(400);
-//		split3.setDividerLocation(400);
-		
-		tree.setCellRenderer(new MyTreeCellRenderer());
-		
-//		tree.setCellRenderer(new TreeCellRenderer() {
-//			final TreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
-//			
-//			@Override
-//			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
-//					boolean leaf, int row, boolean hasFocus) {
-//				Component component = defaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-//				JLabel label = (JLabel) component; 
-//				DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) value;
-//				return component;
-//			}
-//		});	
-		
-		tree.addTreeSelectionListener(new TreeSelectionListener() {
-			
-			@Override
-			public void valueChanged(TreeSelectionEvent e) {
-				MyTreeNode dmtn = (MyTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
-				int div = split1.getDividerLocation();
-				split1.setRightComponent(dmtn.createPanel(wiki));
-				split1.setDividerLocation(div);
-//				if(dmtn instanceof TestTreeNode) {
-//					split1.setRightComponent(((TestTreeNode)dmtn).test.createPanel());
-//				} else try {
-//					String html = wiki.getPageHTML(dmtn.getUserObject()+"");
-//					textField.setText(html);
-//					wikiField.setText(wiki.getPageWiki(dmtn.getUserObject()+""));
-//					metaField.setText(html);
-////					metaField.setText(parseHTML2Meta(html).toString());
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-			}
-		});
-		
-		wiki.frame.setContentPane(split1);
-		wiki.frame.setVisible(true);
-		
-		
-		Thread loadTestThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				wiki.loadTests(root);
-			}
-		});
-		
-		loadTestThread.start();
+		launch();
 	}
 
 	protected void loadTests(MyTreeNode root) {
 		Vector<Test> tests = new Vector<Test>();
 		try {
-			String html = getPageHTML(root.getUserObject()+"");
+			String html = getPageHTML(root.getValue()+"");
 			tests = parseHTML2Meta(html, root.toString());
 		} catch (Exception e) {
-			System.err.println("No Test found in " + root + "("+e+")");
+			System.err.println("No Test found in " + root.getValue() + "("+e+")");
 //			e.printStackTrace();
 		}
-		for(int i = 0; i < root.getChildCount(); i++) {
-			loadTests((MyTreeNode) root.getChildAt(i));
+		for(int i = 0; i < root.getChildren().size(); i++) {
+			loadTests((MyTreeNode) root.getChildren().get(i));
 		}		
 		for(Test test : tests) {
-			root.add(new TestTreeNode(test));
-			frame.repaint();
+			root.getChildren().add(new TestTreeNode(test));
 		}
 	}
 
@@ -373,11 +287,11 @@ public class WikiInterface {
 		for(String childCategoryNameWithPrefix : getCategoryMembers(name, true, false)) {
 			String childCategoryName = childCategoryNameWithPrefix.substring(childCategoryNameWithPrefix.indexOf(":")+1);
 			MyTreeNode childCategoryTreeNode = getCategoryTree(childCategoryName,true);
-			treeNode.add(childCategoryTreeNode);
+			treeNode.getChildren().add(childCategoryTreeNode);
 		}
 		for(String pageName : getCategoryMembers(name, false, true)) {
 			MyTreeNode pageTreeNode = getCategoryTree(pageName,false);
-			treeNode.add(pageTreeNode);
+			treeNode.getChildren().add(pageTreeNode);
 		}
 		return treeNode;
 	}
@@ -494,40 +408,49 @@ public class WikiInterface {
 	}
 	
 	public void saveChanges(){
-		if (!changedTests.isEmpty() && changedTests != null){
-			for (Test test : changedTests){
-				test.submitResults();
-				removeChangedTest(test);
+		Thread loadTestThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (!wiki.changedTests.isEmpty() && wiki.changedTests != null){
+					for (Test test : wiki.changedTests){
+						test.submitResults();
+						System.out.println("Test submitted: " + test.getTestName());
+						//removeChangedTest(test);
+					}
+					wiki.changedTests.clear();
+				}
+				else System.out.println("Error while saving; ");
 			}
-		}
-		else System.out.println("Error while saving; ");
+		});
+		loadTestThread.start();
 	}
 	public void addChangedTest(Test pTest){
-		changedTests.add(pTest);
+		wiki.changedTests.add(pTest);
 		//System.out.println("Added Test: "+ pTest.getTestName());
 	}
 	public void removeChangedTest(Test pTest){
-		if (changedTests.contains(pTest)) {
-			changedTests.remove(pTest);
+		if (wiki.changedTests.contains(pTest)) {
+			wiki.changedTests.remove(pTest);
 			//System.out.println("Removed Test: "+ pTest.getTestName());
 		}
 	}
-	public boolean changedTestsIsEmpty(){
-		return changedTests.isEmpty();
-	}
-	private void createMenuBar(){
-		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("File");
+
+	
+	private MenuBar createMenuBar(){
+		
+		MenuBar menuBar = new MenuBar();
+		Menu menu = new Menu("File");
 		
 		//save option
-		JMenuItem menuItem = new JMenuItem("Save All Tests");
-		menuItem.addActionListener(new ActionListener() {
+		MenuItem menuItem = new MenuItem("Save All Tests");
+		menuItem.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				if (!changedTestsIsEmpty()){
-					int result = JOptionPane.showConfirmDialog(frame,
+			public void handle(javafx.event.ActionEvent event) {
+				// TODO Auto-generated method stub
+					
+				if (!changedTests.isEmpty()){
+					int result = JOptionPane.showConfirmDialog(null,
 							"Would you like to save all unsaved Testresults?",
 							"Confirm Dialog",
 							JOptionPane.OK_CANCEL_OPTION);
@@ -539,48 +462,191 @@ public class WikiInterface {
 				}
 				else JOptionPane.showMessageDialog(frame, "There are no unsaved Testresults");
 			}
-		});
-		menu.add(menuItem);
+		}
+		);
+		menu.getItems().add(menuItem);
 		
 		//set version number
-		menuItem = new JMenuItem("Set Version Number");
-		menuItem.addActionListener(new ActionListener() {
-			
+		menuItem = new MenuItem("Set Version Number");
+		menuItem.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void handle(ActionEvent event) {
 				versionDialog();
-				
 			}
 		});
-		menu.add(menuItem);
+		menu.getItems().add(menuItem);
+		menuBar.getMenus().add(menu);
+		return menuBar;
 		
-		menuBar.add(menu);
-		frame.setJMenuBar(menuBar);
 	}
+	
 	public String getVersion(){
 		if (testedVersion != null)
 			return testedVersion;
 		else return "not set";
 	}
 	public int versionDialog(){
-		JTextField fieldVersion = new JTextField();
-		Object[] Inputs = { "Please enter build number",
-				fieldVersion};
-		int option = JOptionPane.showConfirmDialog(frame, Inputs,"Build number not set",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
-		if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION){
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Enter Build Number");
+		dialog.setContentText("Please enter build number:");
+		
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    testedVersion= result.get();
+		    if (testedVersion.equals(""))
+		    	testedVersion = "not set";
+		    return JOptionPane.OK_OPTION;
+		}
+		else {
 			testedVersion = "not set";
-			System.exit(0);
+			return JOptionPane.CANCEL_OPTION;
 		}
-		if (option == JOptionPane.OK_OPTION){
-			if (!fieldVersion.getText().isEmpty()){
-			testedVersion = fieldVersion.getText();
-			}
-			else {
-				testedVersion = "not set";
-			}
-		}
-		return option;
 	}
 
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		//final WikiInterfaceFX wiki = new WikiInterfaceFX();
+		//wiki = new WikiInterfaceFX();
+		wiki = this;
+		wiki.readUser(null);
+		wiki.login(wiki.user, wiki.pass);
+		
+		wiki.changedTests = new ArrayList<Test>();
+//		String wikiText = wiki.getPageWiki("Hauptseite");
+		
+//		String htmlText = wiki.getPageHTML("Hauptseite");
+		
+//		wiki.setPageWiki("APITestPage", "Hier kommt der neue Text", "Edit via API", null);
+		
+//		System.out.println(wiki.getCategoryMembers("XModeler", true, false));
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				if (!changedTests.isEmpty()){
+					int result = JOptionPane.showConfirmDialog(null,
+							"There are unsaved test results, would you like to submit them?",
+							"Confirm Dialog",
+							JOptionPane.YES_NO_CANCEL_OPTION);
+					switch(result){
+					case JOptionPane.YES_OPTION :	saveChanges(); System.exit(0);	break;
+					case JOptionPane.NO_OPTION :	System.exit(0);	break;		
+					case JOptionPane.CANCEL_OPTION: break;
+					case JOptionPane.CLOSED_OPTION : break;
+					}
+				}
+				else
+					System.exit(0);
+			}
+		});
+		/*
+		wiki.frame = new JFrame();
+		wiki.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		wiki.frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e){
+				if (!wiki.changedTests.isEmpty()){
+					int result = JOptionPane.showConfirmDialog(wiki.frame,
+							"There are unsaved test results, would you like to submit them?",
+							"Confirm Dialog",
+							JOptionPane.YES_NO_CANCEL_OPTION);
+					switch(result){
+					case JOptionPane.YES_OPTION :	wiki.saveChanges(); System.exit(0);	break;
+					case JOptionPane.NO_OPTION :	System.exit(0);	break;		
+					case JOptionPane.CANCEL_OPTION: break;
+					case JOptionPane.CLOSED_OPTION : break;
+					}
+				}
+				else
+					System.exit(0);
+			}	
+		});*/
+		/*wiki.frame.setSize(1200, 800);
+		wiki.frame.setLocation(200, 100);
+		wiki.frame.setTitle("Wiki Interface Test");*/
+		wiki.versionDialog();
+		final MyTreeNode root = wiki.getCategoryTree("XModeler", true);
+		//JTree tree = new JTree(root);
+		TreeView<Object> tree = new TreeView<Object>();
+		tree.setRoot(root);
+//		final JEditorPane textField = new JEditorPane();
+//		textField.setContentType("text/html");
+//		final JEditorPane wikiField = new JEditorPane();
+//		final JEditorPane metaField = new JEditorPane();
+//		JSplitPane split3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(wikiField),  new JScrollPane(metaField));
+//		JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(textField),  split3);	
+		//final JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree),  new JPanel());
+		SplitPane split1 = new SplitPane(tree, new Pane());
+		split1.setDividerPosition(0,0.2);
+//		split1.setDividerLocation(400);
+//		split2.setDividerLocation(400);
+//		split3.setDividerLocation(400);
+		
+		//tree.setCellRenderer(new MyTreeCellRenderer());
+		
+//		tree.setCellRenderer(new TreeCellRenderer() {
+//			final TreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
+//			
+//			@Override
+//			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+//					boolean leaf, int row, boolean hasFocus) {
+//				Component component = defaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+//				JLabel label = (JLabel) component; 
+//				DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) value;
+//				return component;
+//			}
+//		});	
+		
+		
+		 tree.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<TreeItem<Object>>() {
+
+				@Override
+				public void changed(ObservableValue<? extends TreeItem<Object>> observable, TreeItem<Object> oldValue,
+						TreeItem<Object> newValue) {
+					// TODO Auto-generated method stub
+					TreeItem<Object> selectedItem =  newValue;
+		            System.out.println("Selected Text : " + selectedItem.getValue());
+		            try {
+		            	Node split2 = ((WikiPageTreeNode) selectedItem).createPanel(wiki);	
+		            	split1.getItems().set(1,split2);
+		            }
+		            catch (Exception e) {
+		            	try {
+		            	Node split2 = ((TestTreeNode) selectedItem).createPanel(wiki);	
+		            	split1.getItems().set(1,split2);
+		            	((Region) split1.getItems().get(1)).setPadding(new Insets(10, 10, 10, 10));
+		            	}
+		            	catch (Exception f) {
+		            		
+		            	}
+		            }
+		            scene = new Scene(new Group(new VBox(menuBar,split1)));
+		            primaryStage.setScene(scene);
+					primaryStage.show();
+				}
+
+
+		      });
+		 
+		
+		Thread loadTestThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				wiki.loadTests(root);
+			}
+		});
+		
+		loadTestThread.start();
+		
+		split1.setPrefSize(1200, 800);
+		menuBar = createMenuBar();
+		scene = new Scene(new Group(new VBox(menuBar, split1)));
+		
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Wiki Interface Test");
+		primaryStage.show();
+		primaryStage.setResizable(false);
+	}
 }
 

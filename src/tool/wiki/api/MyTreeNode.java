@@ -79,5 +79,15 @@ public abstract class MyTreeNode extends DefaultMutableTreeNode {
 	public Component createPanel(WikiInterface wiki) {
 		return new JPanel();
 	}
+	
+	public int checkIsDue(){
+		int i=0;
+		for(MyTreeNode child : getChildren()){
+			if(child.checkIsDue()>i)
+				i=child.checkIsDue();
+		}
+		return i;
+	}
+	
 
 }

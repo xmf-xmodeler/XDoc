@@ -1,4 +1,4 @@
-package tool.wiki.api;
+package tool.wiki.api.FX;
 
 import java.awt.Component;
 import java.awt.Graphics2D;

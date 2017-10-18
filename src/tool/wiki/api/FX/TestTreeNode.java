@@ -1,10 +1,10 @@
-package tool.wiki.api;
+package tool.wiki.api.FX;
 
-import java.awt.Component;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import javafx.scene.Node;
 import tool.doc.MyTreeCellRenderer;
 
 public class TestTreeNode extends MyTreeNode{
@@ -15,6 +15,7 @@ public class TestTreeNode extends MyTreeNode{
 	public TestTreeNode(Test test) {
 		super(test.getTestName());
 		this.test = test;
+		
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class TestTreeNode extends MyTreeNode{
 	public boolean hasError() {return test.hasError();}
 
 	@Override
-	public Component createPanel(WikiInterface wiki) {
+	public Node createPanel(WikiInterfaceFX wiki) {
 		return test.createPanel();
 	}
 	public int checkIsDue(){

@@ -1,9 +1,8 @@
-package tool.wiki.api;
+package tool.wiki.api.FX;
 
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-
 
 public class CategoryTreeNode extends MyTreeNode{
 	private static final long serialVersionUID = 7115216766256828677L;

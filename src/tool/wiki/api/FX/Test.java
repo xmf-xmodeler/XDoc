@@ -1,7 +1,6 @@
-package tool.wiki.api;
+package tool.wiki.api.FX;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
@@ -12,20 +11,25 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Vector;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import org.jdom2.Element;
 
-import javax.swing.GroupLayout.Alignment;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
 
 public class Test {
 	private String testName;
@@ -122,63 +126,74 @@ public class Test {
 //		return hasProblem?-1.:(System.currentTimeMillis() - lastTestedOn) * (priority+.05);
 //	}
 	
-	public JPanel createPanel() {
+	public Node createPanel() {
 		TestPanel p = new TestPanel();
-			
+				
 		return p;
 	}
 
-	JTextArea freeTextField;
-	JTextArea preField;
-	JTextArea actionField;
-	JTextArea postField;
+	TextArea freeTextField;
+	TextArea preField;
+	TextArea actionField;
+	TextArea postField;
 	
 	//JTextField lastTestedOnField;
-	JTextArea lastTestedResultField;
-	JTextField priorityField;
-	JTextField versionField;
+	TextArea lastTestedResultField;
+	TextField priorityField;
+	TextField versionField;
 	private String tocID;
-	private WikiInterface wiki;
+	private WikiInterfaceFX wiki;
 	private String pageName;
 	JTable resultTable;
 		
-	private class TestPanel extends JPanel {
+	private class TestPanel extends GridPane {
 		private static final long serialVersionUID = 1L;
 
 		private TestPanel() {
-			freeTextField = new JTextArea("");
-			preField = new JTextArea(preCondition);
-			actionField = new JTextArea(action);
-			postField = new JTextArea(postCondition);
+			freeTextField = new TextArea("");
+			preField = new TextArea(preCondition);
+			actionField = new TextArea(action);
+			postField = new TextArea(postCondition);
 
 			//lastTestedOnField = new JTextField();
 			//lastTestedOnField.setEditable(false);
 //			setlastTestedOnDate();
-			lastTestedResultField = new JTextArea("");
-			priorityField = new JTextField(priority+"");
-			versionField = new JTextField(wiki.getVersion());
+			
+			final int scrollHeight = 150;
+			
+			lastTestedResultField = new TextArea("");
+			priorityField = new TextField(priority+"");
+			versionField = new TextField(wiki.getVersion());
 			versionField.setEditable(false);
-			JScrollPane freeTextScroll = new JScrollPane(freeTextField);
-			JScrollPane preScroll = new JScrollPane(preField);
-			JScrollPane actionScroll = new JScrollPane(actionField);
-			JScrollPane postScroll = new JScrollPane(postField);
+			ScrollPane freeTextScroll = new ScrollPane(freeTextField);
+			freeTextScroll.setFitToHeight(true);
+			freeTextScroll.setMaxHeight(scrollHeight);
+			ScrollPane preScroll = new ScrollPane(preField);
+			preScroll.setFitToHeight(true);
+			preScroll.setMaxHeight(scrollHeight);
+			ScrollPane actionScroll = new ScrollPane(actionField);
+			actionScroll.setFitToHeight(true);
+			actionScroll.setMaxHeight(scrollHeight);
+			ScrollPane postScroll = new ScrollPane(postField);
+			postScroll.setFitToHeight(true);
+			postScroll.setMaxHeight(scrollHeight);
 			//JScrollPane resultScroll = new JScrollPane(lastTestedResultField);
 
-			JLabel freeTextLabel = new JLabel("Comment");
-			JLabel preLabel = new JLabel("Preconditions");
-			JLabel actionLabel = new JLabel("Action");
-			JLabel postLabel = new JLabel("Postconditions");
-			JLabel versionLabel = new JLabel("Version");
+			Label freeTextLabel = new Label("Comment");
+			Label preLabel = new Label("Preconditions");
+			Label actionLabel = new Label("Action");
+			Label postLabel = new Label("Postconditions");
+			Label versionLabel = new Label("Version");
 
 			//JLabel lastTestedOnLabel = new JLabel("Last tested");
 			//JLabel lastTestedResultLabel = new JLabel("Result");
-			JLabel priorityLabel = new JLabel("Priority");
-			priorityField.setEnabled(false);
+			Label priorityLabel = new Label("Priority");
+			priorityField.setDisable(true);
 
-			JButton setVersionButton = new JButton("Set Version");
-			JButton reportTestButton = new JButton("Report Test Result");
+			Button setVersionButton = new Button("Set Version");
+			Button reportTestButton = new Button("Report Test Result");
 			//JButton uploadButton = new JButton("Save (UM-Wiki:"+pageName+"/"+tocID+")");
-			
+			/* TABLE
 			JLabel tableLabel = new JLabel("Last results");
 			DefaultTableModel tableModel = new DefaultTableModel();
 			tableModel.addColumn("Date");
@@ -191,18 +206,37 @@ public class Test {
 			}
 			resultTable = new JTable(tableModel);
 			
+			*/
 			
 //			CheckAgainstBox checkAgainstBox = new CheckAgainstBox(hasToBeCheckedAgainstList, getTree(), false, TestNode.this);
 //			JLabel checkAgainstLabel = new JLabel("Check against:");
 //			CheckAgainstBox linkedNodesBox = new CheckAgainstBox(linkedNodeList, getTree(), true, TestNode.this);
 //			JLabel linkedNodesLabel = new JLabel("Linked nodes:");
 			
-			GroupLayout layout = new GroupLayout(this);
-			setLayout(layout);
+//			GroupLayout layout = new GroupLayout(this);
+//			setLayout(layout);
 			
-			final int GAP = 3;
+			final int GAP = 10;
+			//setGridLinesVisible(true);
+			setHgap(GAP);
+			setVgap(GAP);
 			
+			add(preLabel,0,1);
+			add(actionLabel,0,2);
+			add(postLabel,0,3);
+			add(freeTextLabel,0,4);
+			add(priorityLabel,0,5);
+			add(versionLabel,0,6);
 
+			add(preScroll,1,1);
+			add(actionScroll,1,2);
+			add(postScroll,1,3);
+			add(freeTextScroll,1,4);
+			add(priorityField,1,5);
+			add(new HBox(GAP,versionField,setVersionButton),1,6);
+			add(reportTestButton,1,7);
+			
+			/* Old layout
 			final int BOXWIDTH = 370;
 			
 			layout.setHorizontalGroup(layout.createSequentialGroup()
@@ -301,16 +335,76 @@ public class Test {
 							.addComponent(resultTable))
 					.addGap(GAP)
 					);
-			
-			setVersionButton.addActionListener(new ActionListener() {
-				
+			*/
+			setVersionButton.setOnAction(new EventHandler<ActionEvent>() {
+
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void handle(ActionEvent event) {
 					wiki.versionDialog();
 					versionField.setText(wiki.getVersion());
 				}
 			});
 			
+			reportTestButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					int option=0;
+					while (versionField.getText().equals("not set")){
+						option = wiki.versionDialog();
+						versionField.setText(wiki.getVersion());
+						if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION){
+							break;
+						}
+					}
+					if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION){
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Information Dialog");
+						alert.setContentText("You have to enter a build number to proceed");
+
+						alert.showAndWait();
+					}
+					else{
+					int result = JOptionPane.showConfirmDialog(
+							null, 
+							"Were the results as predicted?", 
+							"Report Test Result", 
+							JOptionPane.YES_NO_CANCEL_OPTION, 
+							JOptionPane.QUESTION_MESSAGE, null);
+					String comment = freeTextField.getText();
+					String version = versionField.getText();
+					switch(result) {
+					case JOptionPane.YES_OPTION : {
+//						lastTestedOn = System.currentTimeMillis();
+//						lastTestedBy = "todo";//DocFrame.user;
+//						setlastTestedOnDate();
+//						lastResult = "Success";
+//						lastTestedResultField.setText(lastResult);
+//						hasProblem = false;
+						wiki.removeChangedTest(Test.this);
+						testResults.insertElementAt(new TestResult(new Date(), true, comment, null, getUser(), version), 0);
+						wiki.addChangedTest(Test.this);
+						break;
+					}
+					case JOptionPane.NO_OPTION : {
+//						lastTestedOn = System.currentTimeMillis();
+//						lastTestedBy = "todo";//DocFrame.user;
+//						setlastTestedOnDate();
+//						lastResult = "Fail";
+//						lastTestedResultField.setText(lastResult);
+//						hasProblem = true;
+						wiki.removeChangedTest(Test.this);
+						testResults.insertElementAt(new TestResult(new Date(), false, comment, null, getUser(), version), 0);
+						wiki.addChangedTest(Test.this);
+						break;
+					}
+					}
+					}
+				
+					
+				}
+			});
+			/*
 			reportTestButton.addActionListener(new ActionListener() {
 				
 				@Override
@@ -363,7 +457,7 @@ public class Test {
 					}
 					}
 				}
-			});
+			})*/;
 			
 //			uploadButton.addActionListener(new ActionListener() {
 //				
@@ -418,7 +512,7 @@ public class Test {
 		this.pageName = pageName;
 	}
 	
-	public void setWikiInterface(WikiInterface wiki) {
+	public void setWikiInterface(WikiInterfaceFX wiki) {
 		this.wiki = wiki;
 	}
 
@@ -469,7 +563,7 @@ public class Test {
 		}
 		
 		String text = prefix + content + suffix;
-							
+		
 		try {
 			wiki.setPageWiki(
 				pageName, 
