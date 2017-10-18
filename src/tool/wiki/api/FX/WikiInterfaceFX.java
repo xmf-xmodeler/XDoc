@@ -171,7 +171,7 @@ public class WikiInterfaceFX extends Application {
 		Vector<Test> tests = new Vector<Test>();
 		try {
 			String html = getPageHTML(root.getValue()+"");
-			tests = parseHTML2Meta(html, root.toString());
+			tests = parseHTML2Meta(html, root.getValue().toString());
 		} catch (Exception e) {
 			System.err.println("No Test found in " + root.getValue() + "("+e+")");
 //			e.printStackTrace();
@@ -408,9 +408,9 @@ public class WikiInterfaceFX extends Application {
 	}
 	
 	public void saveChanges(){
-		Thread loadTestThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
+		//Thread loadTestThread = new Thread(new Runnable() {
+		//	@Override
+		//	public void run() {
 				if (!wiki.changedTests.isEmpty() && wiki.changedTests != null){
 					for (Test test : wiki.changedTests){
 						test.submitResults();
@@ -420,9 +420,8 @@ public class WikiInterfaceFX extends Application {
 					wiki.changedTests.clear();
 				}
 				else System.out.println("Error while saving; ");
-			}
-		});
-		loadTestThread.start();
+		//});
+		//loadTestThread.start();
 	}
 	public void addChangedTest(Test pTest){
 		wiki.changedTests.add(pTest);
